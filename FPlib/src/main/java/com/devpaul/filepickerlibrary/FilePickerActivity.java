@@ -426,6 +426,10 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
             return ".xml";
         } else if(mimeType == FileType.JPG) {
            return ".jpg";
+        } else if(mimeType == FileType.PDF) {
+            return ".pdf";
+        } else if(mimeType == FileType.TXT) {
+            return ".txt";
         } else {
             return ".xlsx";
         }

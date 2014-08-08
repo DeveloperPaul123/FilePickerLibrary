@@ -20,5 +20,5 @@ package com.devpaul.filepickerlibrary.enums;
  * Created by Paul Tsouchlos
  */
 public enum FileType {
-    NONE,JPEG,JPG,PNG,XML,XLS,XLSX,DOC,DOCX,HTML,
+    NONE,JPEG,JPG,PNG,XML,XLS,XLSX,DOC,DOCX,HTML,TXT, PDF
 }
