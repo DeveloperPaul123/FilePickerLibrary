@@ -3,6 +3,8 @@ FilePickerLibrary
 
 Simple library that allows for picking of files and directories. This is a clean and simple way to allow your user to easily select a file. This library is inspired by Android L and the new Material Design guidelines adding to its sleekness and beauty.
 
+![image] (images/main_framed.png)
+
 <h2>Requirements</h2>
 Min SDK Level is 14 or Android IceCreamSandwich
 
@@ -46,6 +48,13 @@ filePickerIntent.putIntExtra(FilePicker.INTENT_EXTRA_COLOR_ID, R.color.myColor);
 startActivityForResult(filePickerIntent, FilePickerActivity.REQUEST_DIRECTORY); 
 ```
 
+![image](images/custom_main_framed.png)
+
+<h2>Demo App</h2>
+* **Check out the sample on google play.**
+
+       [![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.devpaul.filepicker)
+	 
 <h2>Todo</h2>
 Push to Maven Central
 
