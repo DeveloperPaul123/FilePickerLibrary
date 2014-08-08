@@ -21,6 +21,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,10 +29,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -132,6 +135,10 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      * {@code ImageButton} that allows the user to create a new folder at the current directory
      */
     private ImageButton newFolderButton;
+    /**
+     * {@code RelativeLayout} header that holds the title and buttons.
+     */
+    private RelativeLayout header;
 
     /**
      * {@code Animation} for showing the buttonContainer
@@ -281,11 +288,11 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                     if(currentFile.isDirectory()) {
                         curDirectory = currentFile;
                         data = new Intent();
-                        data.putExtra(FILE_EXTRA_DATA_PATH, currentFile.getPath());
+                        data.putExtra(FILE_EXTRA_DATA_PATH, currentFile.getAbsolutePath());
                         setResult(RESULT_OK, data);
                         finish();
                     }
-                } else {
+                } else { //request code is for a file
                     if(currentFile.isDirectory()) {
                         curDirectory = currentFile;
                         if(areButtonsShowing) {
@@ -293,12 +300,10 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         }
                         new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                     } else {
-                        if(!currentFile.isDirectory()) {
                             data = new Intent();
-                            data.putExtra(FILE_EXTRA_DATA_PATH, currentFile.getPath());
+                            data.putExtra(FILE_EXTRA_DATA_PATH, currentFile.getAbsolutePath());
                             setResult(RESULT_OK, data);
                             finish();
-                        }
                     }
                 }
             }
@@ -315,15 +320,51 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         hideButtons();
                     }
                     new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
-                } else if (requestCode == REQUEST_FILE) {
-                    Toast.makeText(FilePickerActivity.this, "Not a directory.",
-                            Toast.LENGTH_SHORT).show();
+                } else {
+                    MimeTypeMap myMime = MimeTypeMap.getSingleton();
+
+                    Intent newIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                    String mimeType = myMime.getMimeTypeFromExtension(fileExt(currentFile.toString()).substring(1));
+                    newIntent.setDataAndType(Uri.fromFile(currentFile),mimeType);
+                    newIntent.setFlags(newIntent.FLAG_ACTIVITY_NEW_TASK);
+                    try {
+                        startActivity(newIntent);
+                    } catch (android.content.ActivityNotFoundException e) {
+                        Toast.makeText(FilePickerActivity.this,
+                                "No handler for this type of file.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
 
         buttonContainer = (LinearLayout) findViewById(R.id.button_container);
         buttonContainer.setVisibility(View.INVISIBLE);
+
+        header = (RelativeLayout) findViewById(R.id.header_container);
+    }
+
+    /**
+     * Returns the file extension of a file.
+     * @param url the file path
+     * @return
+     */
+    private String fileExt(String url) {
+        if (url.indexOf("?")>-1) {
+            url = url.substring(0,url.indexOf("?"));
+        }
+        if (url.lastIndexOf(".") == -1) {
+            return null;
+        } else {
+            String ext = url.substring(url.lastIndexOf(".") );
+            if (ext.indexOf("%")>-1) {
+                ext = ext.substring(0,ext.indexOf("%"));
+            }
+            if (ext.indexOf("/")>-1) {
+                ext = ext.substring(0,ext.indexOf("/"));
+            }
+            return ext.toLowerCase();
+
+        }
     }
 
     /**
@@ -350,9 +391,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         super.onListItemClick(l, v, position, id);
         currentFile = files[position];
         adapter.setSelectedPosition(position);
-        if(currentFile.isDirectory()) {
-            showButtons();
-        }
+        showButtons();
     }
 
     /**
@@ -429,13 +468,13 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     private void setHeaderBackground(int colorResId, int drawableResId) {
         if(drawableResId == -1) {
             try {
-                buttonContainer.setBackgroundColor(getResources().getColor(colorResId));
+                header.setBackgroundColor(getResources().getColor(colorResId));
             } catch(Resources.NotFoundException e) {
                 e.printStackTrace();
             }
         } else {
             try {
-                buttonContainer.setBackgroundDrawable(getResources().getDrawable(drawableResId));
+                header.setBackgroundDrawable(getResources().getDrawable(drawableResId));
             } catch(Resources.NotFoundException e) {
                 e.printStackTrace();
             }

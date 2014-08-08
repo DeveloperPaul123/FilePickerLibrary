@@ -14,5 +14,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/file_picker_activity"/>
+    <Button
+        android:id="@+id/file_picker_return_file_path"
+        android:text="@string/return_file_path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:layout_below="@id/file_picker_activity"/>
 
 </RelativeLayout>

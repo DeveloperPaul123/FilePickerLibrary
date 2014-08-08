@@ -87,7 +87,21 @@ public class MainActivity extends Activity {
                 public void onClick(View view) {
                     Intent filePickerActivity = new Intent(getActivity(), FilePickerActivity.class);
                     filePickerActivity.putExtra(FilePickerActivity.SCOPE_TYPE, FileType.ALL);
+                    filePickerActivity.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
                     startActivityForResult(filePickerActivity, FilePickerActivity.REQUEST_DIRECTORY);
+                }
+            });
+
+            Button filePickerForFile = (Button) rootView.findViewById(R.id.file_picker_return_file_path);
+
+            filePickerForFile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent filePicker = new Intent(getActivity(), FilePickerActivity.class);
+                    filePicker.putExtra(FilePickerActivity.SCOPE_TYPE, FileType.ALL);
+                    filePicker.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
+                    filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_orange_dark);
+                    startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
                 }
             });
             return rootView;
@@ -97,6 +111,10 @@ public class MainActivity extends Activity {
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
             if(requestCode == FilePickerActivity.REQUEST_DIRECTORY && resultCode == RESULT_OK) {
+                Toast.makeText(getActivity(), "File Selected: " + data
+                        .getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH),
+                        Toast.LENGTH_LONG).show();
+            } else if (requestCode == FilePickerActivity.REQUEST_FILE && resultCode == RESULT_OK) {
                 Toast.makeText(getActivity(), "File Selected: " + data
                         .getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH),
                         Toast.LENGTH_LONG).show();

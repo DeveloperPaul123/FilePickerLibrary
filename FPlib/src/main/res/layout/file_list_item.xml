@@ -10,8 +10,7 @@
         android:layout_width="54dip"
         android:layout_height="55dip"
         android:layout_marginTop="1dip"
-        android:background="@color/card_detailing"
-        android:src="@drawable/ic_collections_collection"/>
+        android:background="@color/card_detailing"/>
 
     <TextView
         android:id="@+id/file_item_file_name"

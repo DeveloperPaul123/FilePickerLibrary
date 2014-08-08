@@ -17,6 +17,7 @@
 package com.devpaul.filepickerlibrary.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ public class FileListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private int selectedPos;
 
+    private Drawable folderDrawable;
+
     private FileType mFileType;
 
     public FileListAdapter(Context context, File[] fileArray, FileType type) {
@@ -48,6 +51,7 @@ public class FileListAdapter extends BaseAdapter {
         this.inflater = LayoutInflater.from(mContext);
         this.mFileType = type;
         selectedPos = -1;
+        folderDrawable = mContext.getResources().getDrawable(R.drawable.ic_folder);
     }
     @Override
     public int getCount() {
@@ -96,9 +100,13 @@ public class FileListAdapter extends BaseAdapter {
         if (mFileType == FileType.ALL) {
             fileTitle.setText(files[i].getName());
             fileInfo.setText("" + files[i].length() + " bytes");
+            if(files[i].isDirectory()) {
+                fileImage.setBackgroundDrawable(folderDrawable);
+            }
 
         } else if(mFileType == FileType.DIRECTORIES) {
             if(files[i].isDirectory()) {
+                fileImage.setBackgroundDrawable(folderDrawable);
                 fileTitle.setText(files[i].getName());
                 fileInfo.setText("" + files[i].length() + " bytes");
             }
