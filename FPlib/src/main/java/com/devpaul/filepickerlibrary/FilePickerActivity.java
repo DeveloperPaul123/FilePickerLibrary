@@ -20,8 +20,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -34,6 +33,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devpaul.filepickerlibrary.adapter.FileListAdapter;
 
@@ -41,6 +41,7 @@ import java.io.File;
 
 /**
  * Created by Paul Tsouchlos
+ * Contains all the logic for selecting files or directories.
  */
 public class FilePickerActivity extends ListActivity implements NameFileDialogInterface {
 
@@ -62,9 +63,22 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
     /**
      * Constant value for adding the SCOPE_TYPE enum as an extra to the {@code FilePickerActivity}
-     * {@code Intent}
+     * {@code Intent} The default is {@code FileType.ALL} see
+     * {@link com.devpaul.filepickerlibrary.FileType} for other types.
      */
     public static final String SCOPE_TYPE = "scopeType";
+
+    /**
+     * Constant label value for sending a color id extra in the calling intent for this
+     * {@code FilePickerActivity}
+     */
+    public static final String INTENT_EXTRA_COLOR_ID = "intentExtraColorId";
+
+    /**
+     * Constant label value for sending a drawable image id in the calling intent for this
+     * {@code FilePickerActivity}
+     */
+    public static final String INTENT_EXTRA_DRAWABLE_ID = "intentExtraDrawableId";
 
     /**
      * Constant for retrieving the return file path in {@link #onActivityResult(int, int, android.content.Intent)}
@@ -174,6 +188,16 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      */
     private Intent data;
 
+    /**
+     * {@code int} used to store the color resource id sent as an extra to this activity.
+     */
+    private int colorId;
+
+    /**
+     * {@code int} used to store the drawable resource id sent as an extra to this activity.
+     */
+    private int drawableId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,7 +206,12 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         isUpButtonShowing = false;
 
         setContentView(R.layout.file_picker_activity_layout);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        try {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
 
         //set up the animations
         setUpAnimations();
@@ -192,9 +221,16 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         scopeType = (FileType) getIntent().getSerializableExtra(SCOPE_TYPE);
         requestCode = getIntent().getIntExtra(REQUEST_CODE, REQUEST_DIRECTORY);
 
+        colorId = getIntent().getIntExtra(INTENT_EXTRA_COLOR_ID, android.R.color.holo_blue_light);
+        drawableId = getIntent().getIntExtra(INTENT_EXTRA_DRAWABLE_ID, -1);
+
         listView = (ListView) findViewById(android.R.id.list);
 
         initializeViews();
+
+        //drawable has not been set so set the color.
+        setHeaderBackground(colorId, drawableId);
+
 
         curDirectory = new File(Environment.getExternalStorageDirectory().getPath());
         currentFile = new File(curDirectory.getPath());
@@ -280,7 +316,8 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                     }
                     new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                 } else if (requestCode == REQUEST_FILE) {
-
+                    Toast.makeText(FilePickerActivity.this, "Not a directory.",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -373,34 +410,33 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
             fileName = "New Folder";
         }
         File file = new File(curDirectory.getPath() + "//" + fileName);
+        boolean created = false;
         if(!file.exists()) {
-            file.mkdirs();
+            created = file.mkdirs();
         }
-        new UpdateFilesTask(this).execute(curDirectory);
+
+        if(created) {
+            new UpdateFilesTask(this).execute(curDirectory);
+        }
     }
 
-    /**
-     * Set the background drawable of the header
-     * @param background {@code Drawable} to use.
-     */
-    public void setHeaderBackground(Drawable background) {
-        if(background != null) {
-            buttonContainer.setBackgroundDrawable(background);
-        }
-    }
 
     /**
      * Set the background color of the header
-     * @param colorId Resource Id of the color
+     * @param colorResId Resource Id of the color
+     * @param drawableResId Resource Id of the drawable
      */
-    public void setHeaderBackground(int colorId) {
-
-        if(colorId != 0) {
+    private void setHeaderBackground(int colorResId, int drawableResId) {
+        if(drawableResId == -1) {
             try {
-                buttonContainer.setBackgroundColor(getResources().getColor(colorId));
-            } catch(Exception e) {
-                buttonContainer.setBackgroundColor(getResources()
-                        .getColor(android.R.color.holo_blue_light));
+                buttonContainer.setBackgroundColor(getResources().getColor(colorResId));
+            } catch(Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                buttonContainer.setBackgroundDrawable(getResources().getDrawable(drawableResId));
+            } catch(Resources.NotFoundException e) {
                 e.printStackTrace();
             }
         }

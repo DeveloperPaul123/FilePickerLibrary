@@ -17,9 +17,10 @@
 package com.devpaul.filepickerlibrary;
 
 /**
- * Created by Paul Tsouchlos
+ * An enum that has two possible values, {@code ALL} or {@code DIRECTORIES}
  */
 public enum FileType {
 
-    ALL,DIRECTORIES
+    ALL
+    ,DIRECTORIES
 }
