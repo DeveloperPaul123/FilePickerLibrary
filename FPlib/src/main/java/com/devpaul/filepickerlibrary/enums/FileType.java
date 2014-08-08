@@ -14,13 +14,11 @@
  *    limitations under the License.
  */
 
-package com.devpaul.filepickerlibrary;
+package com.devpaul.filepickerlibrary.enums;
 
 /**
- * An enum that has two possible values, {@code ALL} or {@code DIRECTORIES}
+ * Created by Paul Tsouchlos
  */
 public enum FileType {
-
-    ALL
-    ,DIRECTORIES
+    NONE,JPEG,JPG,PNG,XML,XLS,XLSX,DOC,DOCX,HTML,
 }

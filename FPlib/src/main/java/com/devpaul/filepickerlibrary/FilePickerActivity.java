@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -39,6 +40,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devpaul.filepickerlibrary.adapter.FileListAdapter;
+import com.devpaul.filepickerlibrary.enums.FileScopeType;
+import com.devpaul.filepickerlibrary.enums.FileType;
+import com.devpaul.filepickerlibrary.enums.ThemeType;
 
 import java.io.File;
 
@@ -67,7 +71,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     /**
      * Constant value for adding the SCOPE_TYPE enum as an extra to the {@code FilePickerActivity}
      * {@code Intent} The default is {@code FileType.ALL} see
-     * {@link com.devpaul.filepickerlibrary.FileType} for other types.
+     * {@link com.devpaul.filepickerlibrary.enums.FileScopeType} for other types.
      */
     public static final String SCOPE_TYPE = "scopeType";
 
@@ -182,9 +186,29 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     private boolean isUpButtonShowing;
 
     /**
-     * {@link com.devpaul.filepickerlibrary.FileType} enum
+     * {@link com.devpaul.filepickerlibrary.enums.FileScopeType} enum
      */
-    private FileType scopeType;
+    private FileScopeType scopeType;
+
+    /**
+     * {@link com.devpaul.filepickerlibrary.enums.ThemeType} enum for the type of them for this
+     * activity.
+     */
+    private ThemeType themeType;
+    /**
+     * Constant used for passing a {@link com.devpaul.filepickerlibrary.enums.ThemeType} enum
+     * to this activity from the calling activity.
+     */
+    public static final String THEME_TYPE = "themeType";
+    /**
+     * {@link com.devpaul.filepickerlibrary.enums.FileType} enum for the mime type
+     * The default is FileType.NONE
+     */
+    private FileType mimeType;
+    /**
+     * Constant used for setting the mime type of the files that the user is supposed to choose.
+     */
+    public static final String MIME_TYPE = "mimeType";
     /**
      * Request code for this activity
      */
@@ -209,27 +233,47 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //get the theme type for this activity
+        themeType = (ThemeType) getIntent().getSerializableExtra(THEME_TYPE);
+        if (themeType == null) {
+            themeType = ThemeType.ACTIVITY;
+        }
+
+        setThemeType(themeType);
+
         areButtonsShowing = false;
         isUpButtonShowing = false;
 
-        setContentView(R.layout.file_picker_activity_layout);
+
+
         try {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
+        //set up the mime type for the file.
+        mimeType = (FileType) getIntent().getSerializableExtra(MIME_TYPE);
+        if(mimeType == null) {
+            mimeType = FileType.NONE;
+        }
 
         //set up the animations
         setUpAnimations();
 
         //get the scope type and request code. Defaults are all files and request of a directory
         //path.
-        scopeType = (FileType) getIntent().getSerializableExtra(SCOPE_TYPE);
+        scopeType = (FileScopeType) getIntent().getSerializableExtra(SCOPE_TYPE);
+        if(scopeType == null) {
+            //set default if it is null
+            scopeType = FileScopeType.ALL;
+        }
         requestCode = getIntent().getIntExtra(REQUEST_CODE, REQUEST_DIRECTORY);
 
         colorId = getIntent().getIntExtra(INTENT_EXTRA_COLOR_ID, android.R.color.holo_blue_light);
         drawableId = getIntent().getIntExtra(INTENT_EXTRA_DRAWABLE_ID, -1);
+
+        setContentView(R.layout.file_picker_activity_layout);
 
         listView = (ListView) findViewById(android.R.id.list);
 
@@ -243,7 +287,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         currentFile = new File(curDirectory.getPath());
         lastDirectory = curDirectory.getParentFile();
 
-        if(curDirectory.isDirectory()) {
+        if (curDirectory.isDirectory()) {
             new UpdateFilesTask(this).execute(curDirectory);
         } else {
             try {
@@ -300,10 +344,24 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         }
                         new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                     } else {
+                        if(mimeType != FileType.NONE) {
+                            String requiredExtension = getMimeTypeString(mimeType);
+                            if(requiredExtension.equalsIgnoreCase(fileExt(currentFile.toString()))) {
+                                data = new Intent();
+                                data.putExtra(FILE_EXTRA_DATA_PATH, currentFile.getAbsolutePath());
+                                setResult(RESULT_OK, data);
+                                finish();
+                            } else {
+                                Toast.makeText(FilePickerActivity.this, "Please select a "
+                                        + requiredExtension + " file.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
                             data = new Intent();
                             data.putExtra(FILE_EXTRA_DATA_PATH, currentFile.getAbsolutePath());
                             setResult(RESULT_OK, data);
                             finish();
+                        }
                     }
                 }
             }
@@ -324,15 +382,22 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                     MimeTypeMap myMime = MimeTypeMap.getSingleton();
 
                     Intent newIntent = new Intent(android.content.Intent.ACTION_VIEW);
-                    String mimeType = myMime.getMimeTypeFromExtension(fileExt(currentFile.toString()).substring(1));
-                    newIntent.setDataAndType(Uri.fromFile(currentFile),mimeType);
-                    newIntent.setFlags(newIntent.FLAG_ACTIVITY_NEW_TASK);
-                    try {
-                        startActivity(newIntent);
-                    } catch (android.content.ActivityNotFoundException e) {
+                    String file = currentFile.toString();
+                    if(file != null) {
+                        String mimeType = myMime.getMimeTypeFromExtension(fileExt(file).substring(1));
+                        newIntent.setDataAndType(Uri.fromFile(currentFile),mimeType);
+                        newIntent.setFlags(newIntent.FLAG_ACTIVITY_NEW_TASK);
+                        try {
+                            startActivity(newIntent);
+                        } catch (android.content.ActivityNotFoundException e) {
+                            Toast.makeText(FilePickerActivity.this,
+                                    "No handler for this type of file.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
                         Toast.makeText(FilePickerActivity.this,
-                                "No handler for this type of file.", Toast.LENGTH_SHORT).show();
+                                    "Could not get file type.", Toast.LENGTH_SHORT).show();
                     }
+
                 }
             }
         });
@@ -341,6 +406,29 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         buttonContainer.setVisibility(View.INVISIBLE);
 
         header = (RelativeLayout) findViewById(R.id.header_container);
+    }
+
+    private String getMimeTypeString(FileType mimeType) {
+
+        if(mimeType == FileType.DOC) {
+            return ".doc";
+        } else if(mimeType == FileType.DOCX) {
+            return ".docx";
+        } else if(mimeType == FileType.HTML) {
+            return ".html";
+        } else if(mimeType == FileType.JPEG) {
+            return ".jpeg";
+        } else if(mimeType == FileType.PNG) {
+            return ".png";
+        } else if(mimeType == FileType.XLS) {
+            return ".xls";
+        } else if(mimeType == FileType.XML) {
+            return ".xml";
+        } else if(mimeType == FileType.JPG) {
+           return ".jpg";
+        } else {
+            return ".xlsx";
+        }
     }
 
     /**
@@ -483,6 +571,24 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     }
 
     /**
+     * Sets the theme for this activity
+     * @param themeType the {@code ThemeType} enum set in the calling intent.
+     */
+    public void setThemeType(ThemeType themeType) {
+        if(themeType == ThemeType.ACTIVITY) {
+            setTheme(android.R.style.Theme_Holo_Light);
+        } else if(themeType == ThemeType.DIALOG) {
+            setTheme(android.R.style.Theme_Holo_Light_Dialog);
+        } else if(themeType == ThemeType.DIALOG_NO_ACTION_BAR) {
+            setTheme(android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
+        }
+    }
+
+    public ThemeType getThemeType() {
+        return themeType;
+    }
+
+    /**
      * Class that updates the list view with a new array of files. Resets the adapter and the
      * directory title.
      */
@@ -499,6 +605,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
         @Override
         protected void onPreExecute() {
+            Log.i("FilePicker", "AsyncCalled");
             dialog = new ProgressDialog(mContext);
             dialog.setMessage("Loading...");
             dialog.setCancelable(false);

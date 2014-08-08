@@ -21,12 +21,11 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.devpaul.filepickerlibrary.FileType;
+import com.devpaul.filepickerlibrary.enums.FileScopeType;
 import com.devpaul.filepickerlibrary.R;
 
 import java.io.File;
@@ -43,9 +42,9 @@ public class FileListAdapter extends BaseAdapter {
 
     private Drawable folderDrawable;
 
-    private FileType mFileType;
+    private FileScopeType mFileType;
 
-    public FileListAdapter(Context context, File[] fileArray, FileType type) {
+    public FileListAdapter(Context context, File[] fileArray, FileScopeType type) {
         this.mContext = context;
         this.files = fileArray;
         this.inflater = LayoutInflater.from(mContext);
@@ -97,14 +96,14 @@ public class FileListAdapter extends BaseAdapter {
         TextView fileInfo = (TextView) view.findViewById(R.id.file_item_file_info);
         ImageView fileImage = (ImageView) view.findViewById(R.id.file_item_image_view);
 
-        if (mFileType == FileType.ALL) {
+        if (mFileType == FileScopeType.ALL) {
             fileTitle.setText(files[i].getName());
             fileInfo.setText("" + files[i].length() + " bytes");
             if(files[i].isDirectory()) {
                 fileImage.setBackgroundDrawable(folderDrawable);
             }
 
-        } else if(mFileType == FileType.DIRECTORIES) {
+        } else if(mFileType == FileScopeType.DIRECTORIES) {
             if(files[i].isDirectory()) {
                 fileImage.setBackgroundDrawable(folderDrawable);
                 fileTitle.setText(files[i].getName());

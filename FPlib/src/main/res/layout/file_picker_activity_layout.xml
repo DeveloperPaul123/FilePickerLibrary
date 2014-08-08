@@ -52,7 +52,7 @@
             android:dividerHeight="0dip"
             android:divider="@color/card_detailing"
             android:layout_below="@id/header_container"
-            android:layout_marginTop="5dip"
+            android:layout_marginTop="2dip"
             android:choiceMode="singleChoice"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"/>

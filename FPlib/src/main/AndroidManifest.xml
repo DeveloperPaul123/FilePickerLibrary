@@ -8,6 +8,7 @@
         android:icon="@drawable/ic_launcher"
 >
         <activity android:name="com.devpaul.filepickerlibrary.FilePickerActivity"/>
+
     </application>
 
 </manifest>

@@ -17,8 +17,7 @@
         style="@style/FileName.Title"
         android:layout_marginTop="8dip"
         android:layout_marginLeft="8dip"
-        android:layout_toRightOf="@+id/file_item_image_view"
-        android:text="My Document"/>
+        android:layout_toRightOf="@+id/file_item_image_view"/>
 
     <TextView
         android:id="@+id/file_item_file_info"
@@ -26,7 +25,6 @@
         android:layout_toRightOf="@id/file_item_image_view"
         android:layout_marginTop="2dip"
         android:layout_marginLeft="8dip"
-        style="@style/FileName.Secondary"
-        android:text="34555kb"/>
+        style="@style/FileName.Secondary"/>
 
 </RelativeLayout>

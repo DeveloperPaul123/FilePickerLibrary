@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="file_picker_activity">FilePicker Activity</string>
     <string name="return_file_path">Return File Path</string>
+    <string name="file_picker_dialog">FilePicker Dialog</string>
 
 </resources>
