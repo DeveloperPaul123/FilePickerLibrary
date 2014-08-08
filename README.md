@@ -47,8 +47,27 @@ filePickerIntent.putIntExtra(FilePicker.REQUEST_CODE, FilePickerActivity.REQUEST
 filePickerIntent.putIntExtra(FilePicker.INTENT_EXTRA_COLOR_ID, R.color.myColor);
 startActivityForResult(filePickerIntent, FilePickerActivity.REQUEST_DIRECTORY); 
 ```
+You can also change the theme for the activity to make it look like a dialog.
+```java
+Intent filePickerDialogIntent = new Intent(getActivity(), FilePickerActivity.class);
+filePickerDialogIntent.putExtra(FilePickerActivity.THEME_TYPE, ThemeType.DIALOG);
+filePickerDialogIntent.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
+startActivityForResult(filePickerDialogIntent, FilePickerActivity.REQUEST_FILE);
+```
+In addition you can set a mime type that you want the user to select. The activity will not return a result until that type of file is selected. For example: 
 
+```java
+Intent filePicker = new Intent(getActivity(), FilePickerActivity.class);
+filePicker.putExtra(FilePickerActivity.SCOPE_TYPE, FileScopeType.ALL);
+filePicker.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
+filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_green_dark);
+filePicker.putExtra(FilePickerActivity.MIME_TYPE, FileType.PNG);
+startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
+```
 ![image](images/custom_main_framed.png)
+
+
+                    
 
 <h2>Demo App</h2>
 * **Check out the sample on google play.**
