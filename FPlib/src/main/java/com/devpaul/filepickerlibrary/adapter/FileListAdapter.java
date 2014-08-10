@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,14 +29,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.devpaul.filepickerlibrary.enums.FileScopeType;
 import com.devpaul.filepickerlibrary.R;
+import com.devpaul.filepickerlibrary.enums.FileScopeType;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Paul Tsouchlos
@@ -43,7 +45,7 @@ import java.lang.ref.WeakReference;
 public class FileListAdapter extends BaseAdapter {
 
     private Context mContext;
-    private File[] files;
+    private List<File> fileList;
     private LayoutInflater inflater;
     private int selectedPos;
     private Bitmap bitmap;
@@ -54,20 +56,30 @@ public class FileListAdapter extends BaseAdapter {
 
     public FileListAdapter(Context context, File[] fileArray, FileScopeType type) {
         this.mContext = context;
-        this.files = fileArray;
+        this.fileList = new ArrayList<File>(Arrays.asList(fileArray));
         this.inflater = LayoutInflater.from(mContext);
         this.mFileType = type;
         selectedPos = -1;
         folderDrawable = mContext.getResources().getDrawable(R.drawable.ic_folder);
+
+        if(mFileType == FileScopeType.DIRECTORIES) {
+            for(int i = 0; i < fileList.size(); i++) {
+               String extension = fileExt(fileList.get(i).getPath());
+               if(extension != null) {
+                   Log.d("FILELISTADAPTER", "Ext: " + extension);
+                   fileList.remove(i);
+               }
+            }
+        }
     }
     @Override
     public int getCount() {
-        return files.length;
+        return fileList.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return files[i];
+        return fileList.get(i);
     }
 
     @Override
@@ -105,10 +117,10 @@ public class FileListAdapter extends BaseAdapter {
         ImageView fileImage = (ImageView) view.findViewById(R.id.file_item_image_view);
 
         if (mFileType == FileScopeType.ALL) {
-            fileTitle.setText(files[i].getName());
-            fileInfo.setText("" + files[i].length() + " bytes");
-            String fileExt = fileExt(files[i].toString());
-            if(files[i].isDirectory()) {
+            fileTitle.setText(fileList.get(i).getName());
+            fileInfo.setText("" + fileList.get(i).length() + " bytes");
+            String fileExt = fileExt(fileList.get(i).toString());
+            if(fileList.get(i).isDirectory()) {
                 fileImage.setBackgroundDrawable(folderDrawable);
             }
             if(fileExt != null) {
@@ -137,11 +149,11 @@ public class FileListAdapter extends BaseAdapter {
                     fileImage.setBackgroundDrawable(mContext.getResources()
                             .getDrawable(R.drawable.ic_txt_file));
                 } else if(fileExt.equalsIgnoreCase(".jpeg")) {
-                    new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(files[i]);
+                    new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
                 } else if(fileExt.equalsIgnoreCase(".jpg")) {
-                    new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(files[i]);
+                    new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
                 } else if(fileExt.equalsIgnoreCase(".png")) {
-                    new BitmapWorkerTask(fileImage,Bitmap.CompressFormat.PNG).execute(files[i]);
+                    new BitmapWorkerTask(fileImage,Bitmap.CompressFormat.PNG).execute(fileList.get(i));
                 } else {
                     fileImage.setBackgroundDrawable(mContext.getResources()
                             .getDrawable(R.drawable.ic_default_file));
@@ -150,10 +162,10 @@ public class FileListAdapter extends BaseAdapter {
 
 
         } else if(mFileType == FileScopeType.DIRECTORIES) {
-            if(files[i].isDirectory()) {
+            if(fileList.get(i).isDirectory()) {
                 fileImage.setBackgroundDrawable(folderDrawable);
-                fileTitle.setText(files[i].getName());
-                fileInfo.setText("" + files[i].length() + " bytes");
+                fileTitle.setText(fileList.get(i).getName());
+                fileInfo.setText("" + fileList.get(i).length() + " bytes");
             }
         }
 
@@ -277,4 +289,6 @@ public class FileListAdapter extends BaseAdapter {
         return outputStream.toByteArray();
 
     }
+
+
 }
