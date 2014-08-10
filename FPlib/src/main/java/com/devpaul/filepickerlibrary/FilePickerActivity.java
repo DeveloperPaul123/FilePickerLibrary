@@ -339,9 +339,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                 } else { //request code is for a file
                     if(currentFile.isDirectory()) {
                         curDirectory = currentFile;
-                        if(areButtonsShowing) {
-                            hideButtons();
-                        }
+
                         new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                     } else {
                         if(mimeType != FileType.NONE) {
@@ -374,9 +372,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                 if(currentFile.isDirectory()) {
                     curDirectory = currentFile;
                     directoryTitle.setText(curDirectory.getName());
-                    if(areButtonsShowing) {
-                        hideButtons();
-                    }
+
                     new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                 } else {
                     MimeTypeMap myMime = MimeTypeMap.getSingleton();
@@ -483,7 +479,6 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         super.onListItemClick(l, v, position, id);
         currentFile = files[position];
         adapter.setSelectedPosition(position);
-        showButtons();
     }
 
     /**
