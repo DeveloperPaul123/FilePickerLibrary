@@ -77,5 +77,8 @@ startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
 <h2>Todo</h2>
 Push to Maven Central
 
+<h2> Notes </h2>
+Please just use the FileScopeType.ALL for now. When doing further testing I discovered a slight cosmetic issue with the list adapter that I'm trying to work out. The library will still work, the list will just look bad. This should hopefully be fixed shortly.
+
 <h2>Developed By</h2>
 **Paul Tsouchlos**
