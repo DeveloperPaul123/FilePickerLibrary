@@ -1,7 +1,10 @@
 FilePickerLibrary
 =================
 
+[![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-FilePickerLibrary-blue.svg?style=flat)](http://android-arsenal.com/details/1/785)
+
 Simple library that allows for picking of files and directories. This is a clean and simple way to allow your user to easily select a file. This library is inspired by Android L and the new Material Design guidelines adding to its sleekness and beauty.
+
 
 ![image] (images/main_framed.png)
 
