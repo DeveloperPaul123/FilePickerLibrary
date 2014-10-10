@@ -1,7 +1,10 @@
 FilePickerLibrary
 =================
 
+[![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-FilePickerLibrary-blue.svg?style=flat)](http://android-arsenal.com/details/1/785)
+
 Simple library that allows for picking of files and directories. This is a clean and simple way to allow your user to easily select a file. This library is inspired by Android L and the new Material Design guidelines adding to its sleekness and beauty.
+
 
 ![image] (images/main_framed.png)
 
@@ -76,6 +79,9 @@ startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
 	 
 <h2>Todo</h2>
 Push to Maven Central
+
+<h2> Notes </h2>
+Please just use the FileScopeType.ALL for now. When doing further testing I discovered a slight cosmetic issue with the list adapter that I'm trying to work out. The library will still work, the list will just look bad. This should hopefully be fixed shortly.
 
 <h2>Developed By</h2>
 **Paul Tsouchlos**
