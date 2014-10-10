@@ -232,7 +232,6 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //get the theme type for this activity
         themeType = (ThemeType) getIntent().getSerializableExtra(THEME_TYPE);
         if (themeType == null) {
@@ -459,10 +458,10 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      * Initializes the animations used in this activity.
      */
     private void setUpAnimations() {
-        slideUp = AnimationUtils.loadAnimation(this, R.anim.slide_up);
-        slideDown = AnimationUtils.loadAnimation(this, R.anim.slide_down);
-        rotateIn = AnimationUtils.loadAnimation(this, R.anim.rotate_and_fade_in);
-        rotateOut = AnimationUtils.loadAnimation(this, R.anim.rotate_and_fade_out);
+        slideUp = AnimationUtils.loadAnimation(this, com.devpaul.filepickerlibrary.R.anim.slide_up);
+        slideDown = AnimationUtils.loadAnimation(this, com.devpaul.filepickerlibrary.R.anim.slide_down);
+        rotateIn = AnimationUtils.loadAnimation(this, com.devpaul.filepickerlibrary.R.anim.rotate_and_fade_in);
+        rotateOut = AnimationUtils.loadAnimation(this, com.devpaul.filepickerlibrary.R.anim.rotate_and_fade_out);
     }
 
     @Override
