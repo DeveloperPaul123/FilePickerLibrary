@@ -40,6 +40,7 @@ def getRepositoryPassword() {
 
 afterEvaluate { project ->
     uploadArchives {
+        println 'UPLOADING'
         repositories {
             mavenDeployer {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
@@ -47,6 +48,8 @@ afterEvaluate { project ->
                 pom.artifactId = POM_ARTIFACT_ID
 
                 repository(url: sonatypeRepositoryUrl) {
+                    println getRepositoryUsername()
+                    println getRepositoryPassword()
                     authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
                 }
 

@@ -94,7 +94,6 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      *
      * Example:
      *
-     * <pre>
      * {@code
      *
      * protected void onActivityResult(int resultCode, int requestCode, Intent data) {
@@ -458,10 +457,10 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      * Initializes the animations used in this activity.
      */
     private void setUpAnimations() {
-        slideUp = AnimationUtils.loadAnimation(this, com.devpaul.filepickerlibrary.R.anim.slide_up);
-        slideDown = AnimationUtils.loadAnimation(this, com.devpaul.filepickerlibrary.R.anim.slide_down);
-        rotateIn = AnimationUtils.loadAnimation(this, com.devpaul.filepickerlibrary.R.anim.rotate_and_fade_in);
-        rotateOut = AnimationUtils.loadAnimation(this, com.devpaul.filepickerlibrary.R.anim.rotate_and_fade_out);
+        slideUp = AnimationUtils.loadAnimation(FilePickerActivity.this, com.devpaul.filepickerlibrary.R.anim.slide_up);
+        slideDown = AnimationUtils.loadAnimation(FilePickerActivity.this, com.devpaul.filepickerlibrary.R.anim.slide_down);
+        rotateIn = AnimationUtils.loadAnimation(FilePickerActivity.this, com.devpaul.filepickerlibrary.R.anim.rotate_and_fade_in);
+        rotateOut = AnimationUtils.loadAnimation(FilePickerActivity.this, com.devpaul.filepickerlibrary.R.anim.rotate_and_fade_out);
     }
 
     @Override
@@ -478,6 +477,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         super.onListItemClick(l, v, position, id);
         currentFile = files[position];
         adapter.setSelectedPosition(position);
+        showButtons();
     }
 
     /**
@@ -608,6 +608,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
             dialog.setMessage("Loading...");
             dialog.setCancelable(false);
             dialog.show();
+            hideButtons();
             super.onPreExecute();
         }
 

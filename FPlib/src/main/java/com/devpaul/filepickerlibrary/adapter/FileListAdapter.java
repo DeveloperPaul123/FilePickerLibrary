@@ -234,10 +234,10 @@ public class FileListAdapter extends BaseAdapter {
     /**
      * From the google examples, decodes a bitmap as a byte array and then resizes it for the required
      * width and hieght.
-     * @param picture
-     * @param reqWidth
-     * @param reqHeight
-     * @return
+     * @param picture the picture byte array
+     * @param reqWidth the required width
+     * @param reqHeight the required height
+     * @return a Bitmap
      */
     public static Bitmap decodeSampledBitmapFromByteArray(byte[] picture,
                                                           int reqWidth, int reqHeight) {
@@ -280,6 +280,7 @@ public class FileListAdapter extends BaseAdapter {
     /**
      * Encodes a bitmap to a byte array.
      * @param bitmap the bitmap to compress
+     * @param format the compression format for the Bitmap
      * @return {@code byte[]} object
      */
     public static byte[] encodeBitmapToArray(Bitmap bitmap, Bitmap.CompressFormat format) {
