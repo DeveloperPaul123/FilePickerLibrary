@@ -94,11 +94,11 @@ dependencies {
 Please just use the FileScopeType.ALL for now. When doing further testing I discovered a slight cosmetic issue with the list adapter that I'm trying to work out. The library will still work, the list will just look bad. This should hopefully be fixed shortly.
 
 <h2>Developed By</h2>
-**Paul Tsouchlos**
+**Paul T**
 
 <h2>License</h2>
 
-Copyright 2014 Paul Tsouchlos
+Copyright 2014 Paul T
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
 
