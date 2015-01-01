@@ -96,22 +96,24 @@
     </RelativeLayout>
 
 
-    <com.melnykov.fab.FloatingActionButton
+    <ImageButton
         android:id="@+id/file_navigation_up_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
         android:src="@drawable/ic_action_navigation_back"
         android:layout_gravity="top|right"
-        android:layout_marginTop="70dip"
+        android:background="@drawable/circle"
+        android:layout_marginTop="65dip"
         android:layout_marginRight="70dip"/>
 
-    <com.melnykov.fab.FloatingActionButton
+    <ImageButton
         android:id="@+id/new_file_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
         android:src="@drawable/ic_action_content_new"
         android:layout_gravity="top|right"
-        android:layout_marginTop="70dip"
+        android:layout_marginTop="65dip"
+        android:background="@drawable/circle"
         android:layout_marginRight="10dip"/>
 
     </FrameLayout>
