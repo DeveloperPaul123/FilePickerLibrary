@@ -77,11 +77,33 @@ startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
 
        [![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.devpaul.filepicker)
 	 
-<h2>Todo</h2>
-Push to Maven Central
+<h2>Todo (UPDATE: Done)</h2>
+Push to Maven Central 
+
+Hey! I did this so now all you have to do is add this line to your dependencies in your build.gradle file. 
+````java
+repositories {
+mavenCentral()
+}
+dependencies {
+  'com.github.developerpaul123.filepickerlibrary:library:1.0@aar'
+  }
+  ````
 
 <h2> Notes </h2>
 Please just use the FileScopeType.ALL for now. When doing further testing I discovered a slight cosmetic issue with the list adapter that I'm trying to work out. The library will still work, the list will just look bad. This should hopefully be fixed shortly.
 
 <h2>Developed By</h2>
-**Paul Tsouchlos**
+**Paul T**
+
+<h2>License</h2>
+
+Copyright 2014 Paul T
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
