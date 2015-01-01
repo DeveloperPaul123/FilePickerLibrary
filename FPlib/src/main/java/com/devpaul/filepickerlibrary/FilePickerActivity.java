@@ -43,6 +43,7 @@ import com.devpaul.filepickerlibrary.adapter.FileListAdapter;
 import com.devpaul.filepickerlibrary.enums.FileScopeType;
 import com.devpaul.filepickerlibrary.enums.FileType;
 import com.devpaul.filepickerlibrary.enums.ThemeType;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.io.File;
 
@@ -133,11 +134,11 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     /**
      * {@code ImageButton} that allows for going up one level in a directory tree.
      */
-    private ImageButton navUpButton;
+    private FloatingActionButton navUpButton;
     /**
      * {@code ImageButton} that allows the user to create a new folder at the current directory
      */
-    private ImageButton newFolderButton;
+    private FloatingActionButton newFolderButton;
     /**
      * {@code RelativeLayout} header that holds the title and buttons.
      */
@@ -302,7 +303,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     private void initializeViews() {
         directoryTitle = (TextView) findViewById(R.id.file_directory_title);
 
-        navUpButton = (ImageButton) findViewById(R.id.file_navigation_up_button);
+        navUpButton = (FloatingActionButton) findViewById(R.id.file_navigation_up_button);
         navUpButton.setVisibility(View.INVISIBLE);
         navUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -312,7 +313,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                 }
             }
         });
-        newFolderButton = (ImageButton) findViewById(R.id.new_file_button);
+        newFolderButton = (FloatingActionButton) findViewById(R.id.new_file_button);
         newFolderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
