@@ -8,6 +8,7 @@
         android:icon="@drawable/ic_launcher"
 >
         <activity android:name="com.devpaul.filepickerlibrary.FilePickerActivity"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.NoActionBar"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"/>
 
     </application>

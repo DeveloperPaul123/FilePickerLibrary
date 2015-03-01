@@ -115,52 +115,50 @@ public class FileListAdapter extends BaseAdapter {
         TextView fileTitle = (TextView) view.findViewById(R.id.file_item_file_name);
         TextView fileInfo = (TextView) view.findViewById(R.id.file_item_file_info);
         ImageView fileImage = (ImageView) view.findViewById(R.id.file_item_image_view);
-
         if (mFileType == FileScopeType.ALL) {
             fileTitle.setText(fileList.get(i).getName());
             fileInfo.setText("" + fileList.get(i).length() + " bytes");
             String fileExt = fileExt(fileList.get(i).toString());
             if(fileList.get(i).isDirectory()) {
                 fileImage.setBackgroundDrawable(folderDrawable);
-            }
-            if(fileExt != null) {
-                if(fileExt.equalsIgnoreCase(".doc")) {
-                    fileImage.setBackgroundDrawable(mContext.getResources()
-                            .getDrawable(R.drawable.ic_doc_file));
-                } else if(fileExt.equalsIgnoreCase(".docx")) {
-                    fileImage.setBackgroundDrawable(mContext.getResources()
-                            .getDrawable(R.drawable.ic_docx_file));
-                } else if(fileExt.equalsIgnoreCase(".xls")) {
-                    fileImage.setBackgroundDrawable(mContext.getResources()
-                            .getDrawable(R.drawable.ic_xls_file));
-                } else if(fileExt.equalsIgnoreCase(".xlsx")) {
-                    fileImage.setBackgroundDrawable(mContext.getResources()
-                            .getDrawable(R.drawable.ic_xlsx_file));
-                } else if(fileExt.equalsIgnoreCase(".xml")) {
-                    fileImage.setBackgroundDrawable(mContext.getResources()
-                            .getDrawable(R.drawable.ic_xml_file));
-                } else if(fileExt.equalsIgnoreCase(".html")) {
-                    fileImage.setBackgroundDrawable(mContext.getResources()
-                            .getDrawable(R.drawable.ic_html_file));
-                } else if(fileExt.equalsIgnoreCase(".pdf")) {
-                    fileImage.setBackgroundDrawable(mContext.getResources()
-                            .getDrawable(R.drawable.ic_pdf_file));
-                } else if(fileExt.equalsIgnoreCase(".txt")) {
-                    fileImage.setBackgroundDrawable(mContext.getResources()
-                            .getDrawable(R.drawable.ic_txt_file));
-                } else if(fileExt.equalsIgnoreCase(".jpeg")) {
-                    new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
-                } else if(fileExt.equalsIgnoreCase(".jpg")) {
-                    new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
-                } else if(fileExt.equalsIgnoreCase(".png")) {
-                    new BitmapWorkerTask(fileImage,Bitmap.CompressFormat.PNG).execute(fileList.get(i));
-                } else {
-                    fileImage.setBackgroundDrawable(mContext.getResources()
-                            .getDrawable(R.drawable.ic_default_file));
+            } else {
+                if (fileExt != null) {
+                    if (fileExt.equalsIgnoreCase(".doc")) {
+                        fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.ic_doc_file));
+                    } else if (fileExt.equalsIgnoreCase(".docx")) {
+                        fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.ic_docx_file));
+                    } else if (fileExt.equalsIgnoreCase(".xls")) {
+                        fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.ic_xls_file));
+                    } else if (fileExt.equalsIgnoreCase(".xlsx")) {
+                        fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.ic_xlsx_file));
+                    } else if (fileExt.equalsIgnoreCase(".xml")) {
+                        fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.ic_xml_file));
+                    } else if (fileExt.equalsIgnoreCase(".html")) {
+                        fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.ic_html_file));
+                    } else if (fileExt.equalsIgnoreCase(".pdf")) {
+                        fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.ic_pdf_file));
+                    } else if (fileExt.equalsIgnoreCase(".txt")) {
+                        fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.ic_txt_file));
+                    } else if (fileExt.equalsIgnoreCase(".jpeg")) {
+                        new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
+                    } else if (fileExt.equalsIgnoreCase(".jpg")) {
+                        new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
+                    } else if (fileExt.equalsIgnoreCase(".png")) {
+                        new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.PNG).execute(fileList.get(i));
+                    } else {
+                        fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.ic_default_file));
+                    }
                 }
             }
-
-
         } else if(mFileType == FileScopeType.DIRECTORIES) {
             if(fileList.get(i).isDirectory()) {
                 fileImage.setBackgroundDrawable(folderDrawable);

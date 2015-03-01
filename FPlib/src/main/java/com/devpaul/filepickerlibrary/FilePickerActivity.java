@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.MimeTypeMap;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -228,9 +229,21 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      */
     private int drawableId;
 
+     /**
+     * (@code int) saves the previous first visible item when scrolling, used to make the buttons
+     * disappear
+     */
+    private int mLastFirstVisibleItem;
+
+    /**
+     * (@code Context) saves the context of activity so that you can use it in onClick calls, etc.
+     */
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         //get the theme type for this activity
         themeType = (ThemeType) getIntent().getSerializableExtra(THEME_TYPE);
         if (themeType == null) {
@@ -274,7 +287,25 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         setContentView(R.layout.file_picker_activity_layout);
 
         listView = (ListView) findViewById(android.R.id.list);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
 
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if (areButtonsShowing) {
+                    if (Math.abs(firstVisibleItem - mLastFirstVisibleItem) >= 3) {
+                        hideButtons();
+                        adapter.setSelectedPosition(-1);
+                        mLastFirstVisibleItem = firstVisibleItem;
+                    }
+                } else {
+                    mLastFirstVisibleItem = firstVisibleItem;
+                }
+
+            }
+        });
         initializeViews();
 
         //drawable has not been set so set the color.
@@ -333,6 +364,8 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         data.putExtra(FILE_EXTRA_DATA_PATH, currentFile.getAbsolutePath());
                         setResult(RESULT_OK, data);
                         finish();
+                    } else {
+                        Toast.makeText(mContext, "Please select a directory", Toast.LENGTH_SHORT).show();
                     }
                 } else { //request code is for a file
                     if(currentFile.isDirectory()) {
@@ -476,8 +509,13 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         currentFile = files[position];
-        adapter.setSelectedPosition(position);
-        showButtons();
+        if (adapter.getSelectedPosition() == position) {
+            hideButtons();
+            adapter.setSelectedPosition(-1);
+        } else {
+            adapter.setSelectedPosition(position);
+            showButtons();
+        }
     }
 
     /**
