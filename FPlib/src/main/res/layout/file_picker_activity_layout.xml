@@ -16,17 +16,17 @@
   -->
 
 <FrameLayout
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <RelativeLayout
-        android:layout_height="fill_parent"
-        android:layout_width="fill_parent">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
 
         <RelativeLayout
             android:id="@+id/header_container"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="100dip"
             android:background="@android:color/holo_blue_dark">
 
@@ -52,15 +52,14 @@
             android:dividerHeight="0dip"
             android:divider="@color/card_detailing"
             android:layout_below="@id/header_container"
-            android:layout_marginTop="2dip"
             android:choiceMode="singleChoice"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <LinearLayout
             android:id="@+id/button_container"
-            android:layout_width="fill_parent"
-            android:layout_height="55dip"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
             android:background="@drawable/card"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
@@ -69,21 +68,21 @@
                 android:id="@+id/open_button"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/white"
                 android:textColor="@android:color/primary_text_light_nodisable"
                 android:text="Open"/>
 
             <View
                 android:layout_width="1dip"
-                android:layout_height="35dip"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/darker_gray"/>
             <Button
                 android:id="@+id/select_button"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/card_background"
                 android:textColor="@android:color/primary_text_light_nodisable"
                 android:text="Select"/>
@@ -116,7 +115,4 @@
         android:background="@drawable/circle"
         android:layout_marginRight="10dip"/>
 
-    </FrameLayout>
-
-
-
+</FrameLayout>
