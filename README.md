@@ -82,16 +82,13 @@ Push to Maven Central
 
 Hey! I did this so now all you have to do is add this line to your dependencies in your build.gradle file. 
 ````java
-repositories {
-mavenCentral()
-}
-dependencies {
-  'com.github.developerpaul123.filepickerlibrary:library:1.0@aar'
-  }
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+	  	'com.github.developerpaul123.filepickerlibrary:library:1.0@aar'
+	}
   ````
-
-<h2> Notes </h2>
-Please just use the FileScopeType.ALL for now. When doing further testing I discovered a slight cosmetic issue with the list adapter that I'm trying to work out. The library will still work, the list will just look bad. This should hopefully be fixed shortly.
 
 <h2>Developed By</h2>
 **Paul T**
