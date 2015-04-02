@@ -255,8 +255,6 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         areButtonsShowing = false;
         isUpButtonShowing = false;
 
-
-
         try {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (NullPointerException e) {

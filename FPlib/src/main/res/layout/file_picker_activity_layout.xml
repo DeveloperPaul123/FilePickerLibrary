@@ -18,7 +18,8 @@
 <FrameLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_height="match_parent"
@@ -97,8 +98,8 @@
 
     <ImageButton
         android:id="@+id/file_navigation_up_button"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:src="@drawable/ic_action_navigation_back"
         android:layout_gravity="top|right"
         android:background="@drawable/circle"
@@ -107,12 +108,16 @@
 
     <ImageButton
         android:id="@+id/new_file_button"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:src="@drawable/ic_action_content_new"
         android:layout_gravity="top|right"
         android:layout_marginTop="65dip"
         android:background="@drawable/circle"
         android:layout_marginRight="10dip"/>
+
+    <com.devpaul.materialfabmenu.MaterialFloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>

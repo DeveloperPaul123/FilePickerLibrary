@@ -3,8 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FPlib/FPlib.iml" filepath="$PROJECT_DIR$/FPlib/FPlib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/FilePickerLibrary.iml" filepath="$PROJECT_DIR$/FilePickerLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FilePickerDemo.iml" filepath="$PROJECT_DIR$/FilePickerDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/materialfabmenu/materialfabmenu.iml" filepath="$PROJECT_DIR$/materialfabmenu/materialfabmenu.iml" />
     </modules>
   </component>
 </project>

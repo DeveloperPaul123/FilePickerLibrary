@@ -282,7 +282,6 @@ public class FileListAdapter extends BaseAdapter {
      * @return {@code byte[]} object
      */
     public static byte[] encodeBitmapToArray(Bitmap bitmap, Bitmap.CompressFormat format) {
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(format, 0, outputStream);
         return outputStream.toByteArray();
