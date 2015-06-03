@@ -19,7 +19,7 @@ Clone this repository or download the zip. Then extract to your computer. Simply
 Simply do the following.
 ```java
 Intent filePickerIntent = new Intent(this, FilePickerActivity.class);
-filePickerIntent.putIntExtra(FilePicker.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
+filePickerIntent.putIntExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
 startActivityForResult(filePickerIntent, FilePickerActivity.REQUEST_DIRECTORY); 
 ```
 Make sure to add the int extra for your request code. You can also request for a file path instead of a directory. See the javadocs for more info. To get the file path do the following.
@@ -46,8 +46,8 @@ You can change the header background in the activity by adding resorce ids to yo
 
 ```java
 Intent filePickerIntent = new Intent(this, FilePickerActivity.class);
-filePickerIntent.putIntExtra(FilePicker.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
-filePickerIntent.putIntExtra(FilePicker.INTENT_EXTRA_COLOR_ID, R.color.myColor);
+filePickerIntent.putIntExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
+filePickerIntent.putIntExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, R.color.myColor);
 startActivityForResult(filePickerIntent, FilePickerActivity.REQUEST_DIRECTORY); 
 ```
 You can also change the theme for the activity to make it look like a dialog.
@@ -77,10 +77,8 @@ startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
 
        [![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.devpaul.filepicker)
 	 
-<h2>Todo (UPDATE: Done)</h2>
-Push to Maven Central 
-
-Hey! I did this so now all you have to do is add this line to your dependencies in your build.gradle file. 
+<h2>Dependency</h2>
+Add the following code to your gradle build script.
 ````java
 	repositories {
 		mavenCentral()
