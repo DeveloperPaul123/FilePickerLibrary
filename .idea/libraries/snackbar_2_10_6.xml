@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="snackbar-2.10.6">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/FPlib/build/intermediates/exploded-aar/com.nispok/snackbar/2.10.6/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/FPlib/build/intermediates/exploded-aar/com.nispok/snackbar/2.10.6/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

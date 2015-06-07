@@ -17,12 +17,12 @@
 package com.devpaul.filepickerlibrary;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.EditText;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 /**
  * Created by Paul Tsouchlos
@@ -58,20 +58,27 @@ public class NameFileDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-
-        dialog.setTitle("Enter a file Name");
-
+        MaterialDialog.Builder dialog = new MaterialDialog.Builder(getActivity());
+        dialog.title("New File");
         fileName = new EditText(getActivity());
-        dialog.setView(fileName);
-        dialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        dialog.customView(fileName, false);
+        dialog.positiveText("Done");
+        dialog.negativeText("Cancel");
+        dialog.autoDismiss(false);
+        dialog.callback(new MaterialDialog.ButtonCallback() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if(listener != null) {
+            public void onPositive(MaterialDialog dialog) {
+                if (listener != null) {
                     listener.onReturnFileName(fileName.getText().toString());
                 }
+                dialog.dismiss();
+            }
+            @Override
+            public void onNegative(MaterialDialog dialog) {
+                dialog.dismiss();
             }
         });
-        return dialog.create();
+
+        return dialog.build();
     }
 }

@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,14 +30,18 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.devpaul.filepickerlibrary.R;
 import com.devpaul.filepickerlibrary.enums.FileScopeType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -49,10 +54,17 @@ public class FileListAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private int selectedPos;
     private Bitmap bitmap;
-
+    private float iconPadding;
     private Drawable folderDrawable;
 
     private FileScopeType mFileType;
+
+    private static class ViewHolder {
+        TextView fileTitle;
+        TextView fileInfo;
+        ImageView fileImage;
+        ImageView fileInfoButton;
+    }
 
     public FileListAdapter(Context context, File[] fileArray, FileScopeType type) {
         this.mContext = context;
@@ -61,7 +73,7 @@ public class FileListAdapter extends BaseAdapter {
         this.mFileType = type;
         selectedPos = -1;
         folderDrawable = mContext.getResources().getDrawable(R.drawable.ic_folder);
-
+        iconPadding = mContext.getResources().getDimension(R.dimen.file_picker_lib_default_icon_padding);
         if(mFileType == FileScopeType.DIRECTORIES) {
             for(int i = 0; i < fileList.size(); i++) {
                String extension = fileExt(fileList.get(i).getPath());
@@ -100,76 +112,135 @@ public class FileListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-
+        ViewHolder viewHolder;
+        final int position = i;
         if(view == null) {
             view = inflater.inflate(R.layout.file_list_item, null);
+            viewHolder = new ViewHolder();
+            viewHolder.fileInfo = (TextView) view.findViewById(R.id.file_item_file_info);
+            viewHolder.fileTitle = (TextView) view.findViewById(R.id.file_item_file_name);
+            viewHolder.fileImage = (ImageView) view.findViewById(R.id.file_item_image_view);
+            viewHolder.fileInfoButton = (ImageView) view.findViewById(R.id.file_item_file_info_button);
+            view.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
         }
+
         if(selectedPos == i) {
             view.setBackgroundColor(mContext.getResources()
                     .getColor(R.color.card_detailing));
         } else {
-            view.setBackgroundDrawable(mContext.getResources()
-                    .getDrawable(R.drawable.card));
+            view.setBackgroundColor(mContext.getResources()
+                    .getColor(android.R.color.background_light));
         }
 
-        TextView fileTitle = (TextView) view.findViewById(R.id.file_item_file_name);
-        TextView fileInfo = (TextView) view.findViewById(R.id.file_item_file_info);
-        ImageView fileImage = (ImageView) view.findViewById(R.id.file_item_image_view);
+        viewHolder.fileInfoButton.setBackgroundDrawable(getFileDrawable(R.drawable.ic_action_info));
+        viewHolder.fileInfoButton.setClickable(true);
+        viewHolder.fileInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View customView = LayoutInflater.from(v.getContext()).inflate(R.layout.file_info_layout, null);
+                TextView fileSize = (TextView) customView.findViewById(R.id.file_info_size);
+                TextView fileDate = (TextView) customView.findViewById(R.id.file_info_date_created);
+                TextView filePath = (TextView) customView.findViewById(R.id.file_info_path);
+                File file = fileList.get(position);
+                if(file.isDirectory()) {
+                    new GetFileSizeTask(fileSize, file, "Size: %d bytes").execute();
+                } else {
+                    fileSize.setText("Size: " + file.length() + " bytes");
+                }
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(file.lastModified());
+                DateFormat df = SimpleDateFormat.getDateInstance();
+                fileDate.setText("Last Modified: " + df.format(cal.getTime()));
+                filePath.setText("Path: " + file.getAbsolutePath());
+                new MaterialDialog.Builder(v.getContext())
+                        .title("File: " + fileList.get(position).getName())
+                        .customView(customView, true)
+                        .show();
+            }
+        });
+
         if (mFileType == FileScopeType.ALL) {
-            fileTitle.setText(fileList.get(i).getName());
-            fileInfo.setText("" + fileList.get(i).length() + " bytes");
+            viewHolder.fileTitle.setText(fileList.get(i).getName());
+            if(!fileList.get(i).isDirectory()) {
+                viewHolder.fileInfo.setText("" + fileList.get(i).length() + " bytes");
+            } else {
+                new GetFileSizeTask(viewHolder.fileInfo, fileList.get(i), "%d bytes").execute();
+            }
             String fileExt = fileExt(fileList.get(i).toString());
             if(fileList.get(i).isDirectory()) {
-                fileImage.setBackgroundDrawable(folderDrawable);
+                viewHolder.fileImage.setBackgroundDrawable(getFileDrawable(R.drawable.ic_action_file_folder));
             } else {
                 if (fileExt != null) {
                     if (fileExt.equalsIgnoreCase(".doc")) {
-                        fileImage.setBackgroundDrawable(mContext.getResources()
-                                .getDrawable(R.drawable.ic_doc_file));
+                        viewHolder.fileImage.setBackgroundDrawable(getFileDrawable(R.drawable.ic_doc_file));
                     } else if (fileExt.equalsIgnoreCase(".docx")) {
-                        fileImage.setBackgroundDrawable(mContext.getResources()
-                                .getDrawable(R.drawable.ic_docx_file));
+                        viewHolder.fileImage.setBackgroundDrawable(getFileDrawable(R.drawable.ic_doc_file));
                     } else if (fileExt.equalsIgnoreCase(".xls")) {
-                        fileImage.setBackgroundDrawable(mContext.getResources()
-                                .getDrawable(R.drawable.ic_xls_file));
+                        viewHolder.fileImage.setBackgroundDrawable(getFileDrawable(R.drawable.ic_xls_file));
                     } else if (fileExt.equalsIgnoreCase(".xlsx")) {
-                        fileImage.setBackgroundDrawable(mContext.getResources()
-                                .getDrawable(R.drawable.ic_xlsx_file));
+                        viewHolder.fileImage.setBackgroundDrawable(getFileDrawable(R.drawable.ic_xlsx_file));
                     } else if (fileExt.equalsIgnoreCase(".xml")) {
-                        fileImage.setBackgroundDrawable(mContext.getResources()
-                                .getDrawable(R.drawable.ic_xml_file));
+                        viewHolder.fileImage.setBackgroundDrawable(getFileDrawable(R.drawable.ic_xml_file));
                     } else if (fileExt.equalsIgnoreCase(".html")) {
-                        fileImage.setBackgroundDrawable(mContext.getResources()
-                                .getDrawable(R.drawable.ic_html_file));
+                        viewHolder.fileImage.setBackgroundDrawable(getFileDrawable(R.drawable.ic_html_file));
                     } else if (fileExt.equalsIgnoreCase(".pdf")) {
-                        fileImage.setBackgroundDrawable(mContext.getResources()
-                                .getDrawable(R.drawable.ic_pdf_file));
+                        viewHolder.fileImage.setBackgroundDrawable(getFileDrawable(R.drawable.ic_pdf_file));
                     } else if (fileExt.equalsIgnoreCase(".txt")) {
-                        fileImage.setBackgroundDrawable(mContext.getResources()
-                                .getDrawable(R.drawable.ic_txt_file));
+                        viewHolder.fileImage.setBackgroundDrawable(getFileDrawable(R.drawable.ic_txt_file));
                     } else if (fileExt.equalsIgnoreCase(".jpeg")) {
-                        new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
+                        viewHolder.fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.rectangle));
+                        new BitmapWorkerTask(viewHolder.fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
                     } else if (fileExt.equalsIgnoreCase(".jpg")) {
-                        new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
+                        viewHolder.fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.rectangle));
+                        new BitmapWorkerTask(viewHolder.fileImage, Bitmap.CompressFormat.JPEG).execute(fileList.get(i));
                     } else if (fileExt.equalsIgnoreCase(".png")) {
-                        new BitmapWorkerTask(fileImage, Bitmap.CompressFormat.PNG).execute(fileList.get(i));
+                        viewHolder.fileImage.setBackgroundDrawable(mContext.getResources()
+                                .getDrawable(R.drawable.rectangle));
+                        new BitmapWorkerTask(viewHolder.fileImage, Bitmap.CompressFormat.PNG).execute(fileList.get(i));
                     } else {
-                        fileImage.setBackgroundDrawable(mContext.getResources()
+                        viewHolder.fileImage.setBackgroundDrawable(mContext.getResources()
                                 .getDrawable(R.drawable.ic_default_file));
                     }
                 }
             }
         } else if(mFileType == FileScopeType.DIRECTORIES) {
             if(fileList.get(i).isDirectory()) {
-                fileImage.setBackgroundDrawable(folderDrawable);
-                fileTitle.setText(fileList.get(i).getName());
-                fileInfo.setText("" + fileList.get(i).length() + " bytes");
+                viewHolder.fileImage.setBackgroundDrawable(folderDrawable);
+                viewHolder.fileTitle.setText(fileList.get(i).getName());
+                viewHolder.fileInfo.setText("" + fileList.get(i).length() + " bytes");
             }
         }
-
-
-
         return view;
+    }
+
+    private Drawable getFileDrawable(int fileResource) {
+        Drawable firstLayer = mContext.getResources().getDrawable(fileResource);
+        LayerDrawable drawable = new LayerDrawable(new Drawable[] {
+                mContext.getResources().getDrawable(R.drawable.circle),
+                firstLayer
+        });
+
+        drawable.setLayerInset(1, (int) iconPadding, (int) iconPadding,
+                (int)iconPadding, (int)iconPadding);
+
+        return drawable;
+    }
+
+    private int getDirectorySize(File directory) {
+        File[] files = directory.listFiles();
+        int size = 0;
+        for(File file: files) {
+            if(file.isDirectory()) {
+                size += getDirectorySize(file);
+            } else {
+                size += file.length();
+            }
+        }
+        return size;
     }
 
     /**
@@ -204,6 +275,8 @@ public class FileListAdapter extends BaseAdapter {
 
         public BitmapWorkerTask(ImageView imageView, Bitmap.CompressFormat format) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
+            imageView.setBackgroundDrawable(imageView.getContext()
+                    .getResources().getDrawable(R.drawable.rectangle));
             imageViewReference = new WeakReference<ImageView>(imageView);
             this.mFormat = format;
         }
@@ -288,5 +361,43 @@ public class FileListAdapter extends BaseAdapter {
 
     }
 
+    private class GetFileSizeTask extends AsyncTask<Void, Void, Long> {
+
+        private WeakReference<TextView> textViewWeakReference;
+        private File file;
+        private String formatString;
+
+        private GetFileSizeTask(TextView textView, File f, String string) {
+            this.file = f;
+            this.textViewWeakReference = new WeakReference<TextView>(textView);
+            this.formatString = string;
+        }
+
+        @Override
+        protected Long doInBackground(Void... params) {
+            return getDirectorySize(file);
+        }
+
+        @Override
+        protected void onPostExecute(Long aLong) {
+            TextView textView = textViewWeakReference.get();
+            if(textView != null) {
+                textView.setText(String.format(formatString, aLong));
+            }
+        }
+
+        private long getDirectorySize(File directory) {
+            File[] files = directory.listFiles();
+            int size = 0;
+            for(File file: files) {
+                if(file.isDirectory()) {
+                    size += getDirectorySize(file);
+                } else {
+                    size += file.length();
+                }
+            }
+            return size;
+        }
+    }
 
 }

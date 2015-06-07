@@ -22,6 +22,7 @@ allprojects {
     group = GROUP
     repositories {
         mavenCentral()
+        jcenter()
     }
 }
 apply plugin: 'android-reporting'

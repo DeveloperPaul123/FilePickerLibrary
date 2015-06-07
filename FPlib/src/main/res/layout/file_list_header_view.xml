@@ -19,36 +19,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="16dp">
+    android:layout_height="48dp"
+    android:padding="16dp"
+    android:background="@android:color/background_light">
 
     <ImageView
         android:id="@+id/file_item_image_view"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginLeft="4dp"
-        android:background="@drawable/circle"/>
+        android:background="@android:color/background_light"/>
 
     <TextView
         android:id="@+id/file_item_file_name"
-        style="@style/FileName.Title"
-        android:layout_marginTop="8dip"
+        style="@style/FileName"
+        android:text="Folders"
+        android:textSize="16sp"
+        android:textColor="@android:color/tertiary_text_light"
         android:layout_marginLeft="8dip"
         android:layout_toRightOf="@+id/file_item_image_view"/>
 
-    <TextView
-        android:id="@+id/file_item_file_info"
-        android:layout_below="@id/file_item_file_name"
-        android:layout_toRightOf="@id/file_item_image_view"
-        android:layout_marginTop="2dip"
-        android:layout_marginLeft="8dip"
-        style="@style/FileName.Secondary"/>
-
-    <ImageView
-        android:id="@+id/file_item_file_info_button"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_width="24dp"
-        android:layout_height="24dp" />
 
 </RelativeLayout>

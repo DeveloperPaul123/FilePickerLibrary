@@ -27,5 +27,4 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':FPlib')
-    compile project(':materialfabmenu')
 }
