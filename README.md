@@ -15,6 +15,18 @@ Min SDK Level is 14 or Android IceCreamSandwich
 
 Clone this repository or download the zip. Then extract to your computer. Simply import the library to your project but only include the FPlib module (that's where the library is). If you're using Android Studio then import a module and only include the FPlib module. See the license for usage terms.
 
+Alternatively you can use gradle.
+
+Add the following code to your gradle build script.
+````java
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+	  	'com.github.developerpaul123.filepickerlibrary:library:1.+'
+	}
+  ````
+
 <h2>Usage</h2>
 Simply do the following.
 ```java
@@ -76,18 +88,7 @@ startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
 * **Check out the sample on google play.**
 
        [![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.devpaul.filepicker)
-	 
-<h2>Dependency</h2>
-Add the following code to your gradle build script.
-````java
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-	  	'com.github.developerpaul123.filepickerlibrary:library:1.0@aar'
-	}
-  ````
-
+       
 <h2>Developed By</h2>
 **Paul T**
 
