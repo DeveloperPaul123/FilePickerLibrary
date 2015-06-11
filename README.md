@@ -79,10 +79,6 @@ filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.ho
 filePicker.putExtra(FilePickerActivity.MIME_TYPE, FileType.PNG);
 startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
 ```
-![image](images/custom_main_framed.png)
-
-
-                    
 
 <h2>Demo App</h2>
 * **Check out the sample on google play.**
