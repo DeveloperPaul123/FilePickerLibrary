@@ -523,7 +523,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         if(l.getHeaderViewsCount() != 1) {
-            //adjust for list view header view. 
+            //adjust for list view header view.
             position += 1;
         }
         if(position > 0) {
