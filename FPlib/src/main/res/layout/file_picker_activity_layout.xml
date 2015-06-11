@@ -75,7 +75,7 @@
         <!--android:id="@+id/file_navigation_up_button"-->
         <!--android:layout_width="56dp"-->
         <!--android:layout_height="56dp"-->
-        <!--android:src="@drawable/ic_action_navigation_back"-->
+        <!--android:src="@drawable/fplib_ic_action_navigation_back"-->
         <!--android:layout_gravity="top|right"-->
         <!--android:background="@drawable/circle"-->
         <!--android:layout_marginTop="65dip"-->
@@ -85,7 +85,7 @@
         <!--android:id="@+id/new_file_button"-->
         <!--android:layout_width="56dp"-->
         <!--android:layout_height="56dp"-->
-        <!--android:src="@drawable/ic_action_content_new"-->
+        <!--android:src="@drawable/fplib_ic_action_content_new"-->
         <!--android:layout_gravity="top|right"-->
         <!--android:layout_marginTop="65dip"-->
         <!--android:background="@drawable/circle"-->

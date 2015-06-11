@@ -27,7 +27,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginLeft="4dp"
-        android:background="@drawable/circle"/>
+        android:background="@drawable/fplib_circle"/>
 
     <TextView
         android:id="@+id/file_item_file_name"

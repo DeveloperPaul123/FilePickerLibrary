@@ -37,7 +37,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.devpaul.filepickerlibrary.adapter.FileListAdapter;
 import com.devpaul.filepickerlibrary.enums.FileScopeType;
@@ -91,6 +90,11 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     public static final String INTENT_EXTRA_DRAWABLE_ID = "intentExtraDrawableId";
 
     /**
+     * Constant label value for sending a color id to be used for the floating action button.
+     */
+    public static final String INTENT_EXTRA_FAB_COLOR_ID = "intentExtraFabColorId";
+
+    /**
      * Constant for retrieving the return file path in {@link #onActivityResult(int, int, android.content.Intent)}
      * If the result code is RESULT_OK then the file path will not be null. This should always be
      * checked though.
@@ -134,8 +138,14 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      */
     private TextView directoryTitle;
 
+    /**
+     * Floating action button.
+     */
     private MaterialFloatingActionButton addButton;
 
+    /**
+     * Relative layout that holds the header.
+     */
     private RelativeLayout header;
 
     /**
@@ -169,7 +179,6 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     private File currentFile;
 
     private boolean areButtonsShowing;
-    private boolean isUpButtonShowing;
 
     /**
      * {@link com.devpaul.filepickerlibrary.enums.FileScopeType} enum
@@ -211,6 +220,11 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     private int colorId;
 
     /**
+     * {@code int} used to store the color for the floating action button.
+     */
+    private int fabColorId;
+
+    /**
      * {@code int} used to store the drawable resource id sent as an extra to this activity.
      */
     private int drawableId;
@@ -241,7 +255,6 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         setThemeType(themeType);
 
         areButtonsShowing = false;
-        isUpButtonShowing = false;
 
         try {
             getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -258,17 +271,20 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         //set up the animations
         setUpAnimations();
 
+        Intent givenIntent = getIntent();
+
         //get the scope type and request code. Defaults are all files and request of a directory
         //path.
-        scopeType = (FileScopeType) getIntent().getSerializableExtra(SCOPE_TYPE);
+        scopeType = (FileScopeType) givenIntent.getSerializableExtra(SCOPE_TYPE);
         if(scopeType == null) {
             //set default if it is null
             scopeType = FileScopeType.ALL;
         }
-        requestCode = getIntent().getIntExtra(REQUEST_CODE, REQUEST_DIRECTORY);
+        requestCode = givenIntent.getIntExtra(REQUEST_CODE, REQUEST_DIRECTORY);
 
-        colorId = getIntent().getIntExtra(INTENT_EXTRA_COLOR_ID, android.R.color.holo_blue_light);
-        drawableId = getIntent().getIntExtra(INTENT_EXTRA_DRAWABLE_ID, -1);
+        colorId = givenIntent.getIntExtra(INTENT_EXTRA_COLOR_ID, android.R.color.holo_blue_light);
+        drawableId = givenIntent.getIntExtra(INTENT_EXTRA_DRAWABLE_ID, -1);
+        fabColorId = givenIntent.getIntExtra(INTENT_EXTRA_FAB_COLOR_ID, -1);
 
         setContentView(R.layout.file_picker_activity_layout);
 
@@ -348,26 +364,9 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
             }
         });
 
-//        navUpButton = (ImageButton) findViewById(R.id.file_navigation_up_button);
-//        navUpButton.setVisibility(View.INVISIBLE);
-//        navUpButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (lastDirectory != null) {
-//                    new UpdateFilesTask(FilePickerActivity.this).execute(lastDirectory);
-//                }
-//            }
-//        });
-//        newFolderButton = (ImageButton) findViewById(R.id.new_file_button);
-//        newFolderButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                NameFileDialog nfd = NameFileDialog.newInstance();
-//                nfd.show(getFragmentManager(), "NameDialog");
-//            }
-//        });
-
-
+        if(fabColorId != -1){
+            addButton.setButtonColor(getResources().getColor(fabColorId));
+        }
         selectButton = (Button) findViewById(R.id.select_button);
         selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -380,12 +379,13 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         setResult(RESULT_OK, data);
                         finish();
                     } else {
-                        Toast.makeText(mContext, "Please select a directory", Toast.LENGTH_SHORT).show();
+                        SnackbarManager.show(Snackbar.with(FilePickerActivity.this)
+                                .text("Please select a directory.")
+                                .duration(1500));
                     }
                 } else { //request code is for a file
                     if(currentFile.isDirectory()) {
                         curDirectory = currentFile;
-
                         new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                     } else {
                         if(mimeType != FileType.NONE) {
@@ -396,9 +396,9 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                                 setResult(RESULT_OK, data);
                                 finish();
                             } else {
-                                Toast.makeText(FilePickerActivity.this, "Please select a "
-                                        + requiredExtension + " file.",
-                                        Toast.LENGTH_SHORT).show();
+                                SnackbarManager.show(Snackbar.with(FilePickerActivity.this)
+                                        .text("Please select a " + requiredExtension + " file.")
+                                        .duration(1500));
                             }
                         } else {
                             data = new Intent();
@@ -522,6 +522,10 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        if(l.getHeaderViewsCount() != 1) {
+            //adjust for list view header view. 
+            position += 1;
+        }
         if(position > 0) {
             currentFile = files[position-1];
         }
@@ -661,9 +665,13 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
             }
             lastDirectory = directory.getParentFile();
             curDirectory = directory;
-            listView.removeHeaderView(listHeaderView);
-            if(directory.listFiles().length > 0 && directoryExists(files)) {
+            if(directory.listFiles().length > 0 && directoryExists(files)
+                    && listView.getHeaderViewsCount() == 0) {
                 listView.addHeaderView(listHeaderView);
+            } else if(directory.listFiles().length == 0 || !directoryExists(files)) {
+                if(listView.getHeaderViewsCount() == 1) {
+                    listView.removeHeaderView(listHeaderView);
+                }
             }
             adapter = new FileListAdapter(FilePickerActivity.this, files, scopeType);
             setListAdapter(adapter);

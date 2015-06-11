@@ -88,6 +88,7 @@ public class MainActivity extends Activity {
                     Intent filePickerActivity = new Intent(getActivity(), FilePickerActivity.class);
                     filePickerActivity.putExtra(FilePickerActivity.SCOPE_TYPE, FileScopeType.ALL);
                     filePickerActivity.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
+                    filePickerActivity.putExtra(FilePickerActivity.INTENT_EXTRA_FAB_COLOR_ID, android.R.color.holo_green_dark);
                     startActivityForResult(filePickerActivity, FilePickerActivity.REQUEST_DIRECTORY);
                 }
             });
