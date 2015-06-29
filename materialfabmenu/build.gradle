@@ -1,5 +1,17 @@
+apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.library'
 apply from: '../maven_push.gradle'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.3'
+    }
+}
+
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
@@ -7,8 +19,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode Integer.parseInt(project.VERSION_CODE)
+        versionName project.VERSION_NAME
     }
     buildTypes {
         release {
@@ -20,5 +32,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:appcompat-v7:22.2.0'
 }
