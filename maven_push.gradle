@@ -17,6 +17,10 @@
 apply plugin: 'maven'
 apply plugin: 'signing'
 
+def isReleaseBuild() {
+    return version.contains("SNAPSHOT") == false
+}
+
 def sonatypeRepositoryUrl
 
 if (isReleaseBuild()) {
@@ -44,8 +48,6 @@ afterEvaluate { project ->
         repositories {
             mavenDeployer {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                pom.artifactId = POM_ARTIFACT_ID
 
                 repository(url: sonatypeRepositoryUrl) {
                     println getRepositoryUsername()
@@ -91,7 +93,7 @@ afterEvaluate { project ->
 
     task androidJavadocs(type: Javadoc) {
         source = android.sourceSets.main.java.sourceFiles
-        classpath += project.files(android.plugin.getBootClasspath().join(File.pathSeparator))
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     }
 
     task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
