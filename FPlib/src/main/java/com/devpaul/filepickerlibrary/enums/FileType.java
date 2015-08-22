@@ -20,5 +20,18 @@ package com.devpaul.filepickerlibrary.enums;
  * Created by Paul Tsouchlos
  */
 public enum FileType {
-    NONE,JPEG,JPG,PNG,XML,XLS,XLSX,DOC,DOCX,HTML,TXT, PDF
+    NONE(""), JPEG("image/jpeg"), JPG("image/jpeg"), PNG("image/png"), XML("application/xml"),
+    XLS("application/vnd.ms-excel"), XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+    DOC("application/msword"), DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+    HTML("text/html"), TXT("text/plain"), PDF("application/pdf");
+
+    private String mimeType;
+
+    FileType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
 }
