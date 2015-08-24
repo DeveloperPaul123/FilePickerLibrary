@@ -98,20 +98,20 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      * Constant for retrieving the return file path in {@link #onActivityResult(int, int, android.content.Intent)}
      * If the result code is RESULT_OK then the file path will not be null. This should always be
      * checked though.
-     *
+     * <p/>
      * Example:
-     *
+     * <p/>
      * {@code
-     *
+     * <p/>
      * protected void onActivityResult(int resultCode, int requestCode, Intent data) {
-     *
-     *   if(resultCode == RESULT_OK && requestCode == FILEPICKER) {
-     *       String filePath = data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH);
-     *
-     *       if(filePath != null) {
-     *           //do something with the string.
-     *       }
-     *   }
+     * <p/>
+     * if(resultCode == RESULT_OK && requestCode == FILEPICKER) {
+     * String filePath = data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH);
+     * <p/>
+     * if(filePath != null) {
+     * //do something with the string.
+     * }
+     * }
      * }
      * }
      */
@@ -196,10 +196,9 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      */
     public static final String THEME_TYPE = "themeType";
     /**
-     * {@link com.devpaul.filepickerlibrary.enums.FileType} enum for the mime type
-     * The default is FileType.NONE
+     * Actual mime type to be used for file browsing
      */
-    private FileType mimeType;
+    private String mimeType;
     /**
      * Constant used for setting the mime type of the files that the user is supposed to choose.
      */
@@ -229,7 +228,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      */
     private int drawableId;
 
-     /**
+    /**
      * (@code int) saves the previous first visible item when scrolling, used to make the buttons
      * disappear
      */
@@ -263,9 +262,13 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         }
 
         //set up the mime type for the file.
-        mimeType = (FileType) getIntent().getSerializableExtra(MIME_TYPE);
-        if(mimeType == null) {
-            mimeType = FileType.NONE;
+        Object rawMimeTypeParameter = getIntent().getExtras().get(MIME_TYPE);
+        if (rawMimeTypeParameter instanceof String) {
+            mimeType = (String) rawMimeTypeParameter;
+        } else if (rawMimeTypeParameter instanceof FileType) {
+            mimeType = ((FileType) rawMimeTypeParameter).getMimeType();
+        } else {
+            mimeType = null;
         }
 
         //set up the animations
@@ -276,7 +279,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         //get the scope type and request code. Defaults are all files and request of a directory
         //path.
         scopeType = (FileScopeType) givenIntent.getSerializableExtra(SCOPE_TYPE);
-        if(scopeType == null) {
+        if (scopeType == null) {
             //set default if it is null
             scopeType = FileScopeType.ALL;
         }
@@ -301,7 +304,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         hideButtons();
                         adapter.setSelectedPosition(-1);
                         mLastFirstVisibleItem = firstVisibleItem;
-                    } else if(firstVisibleItem > adapter.getSelectedPosition()) {
+                    } else if (firstVisibleItem > adapter.getSelectedPosition()) {
                         hideButtons();
                         adapter.setSelectedPosition(-1);
                     }
@@ -345,8 +348,8 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                 .equals(Environment.getExternalStorageDirectory().getPath())) {
             new UpdateFilesTask(FilePickerActivity.this).execute(lastDirectory);
         } else {
-           setResult(RESULT_CANCELED);
-           finish();
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
 
@@ -364,15 +367,15 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
             }
         });
 
-        if(fabColorId != -1){
+        if (fabColorId != -1) {
             addButton.setButtonColor(getResources().getColor(fabColorId));
         }
         selectButton = (Button) findViewById(R.id.select_button);
         selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(requestCode == REQUEST_DIRECTORY) {
-                    if(currentFile.isDirectory()) {
+                if (requestCode == REQUEST_DIRECTORY) {
+                    if (currentFile.isDirectory()) {
                         curDirectory = currentFile;
                         data = new Intent();
                         data.putExtra(FILE_EXTRA_DATA_PATH, currentFile.getAbsolutePath());
@@ -384,13 +387,14 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                                 .duration(1500));
                     }
                 } else { //request code is for a file
-                    if(currentFile.isDirectory()) {
+                    if (currentFile.isDirectory()) {
                         curDirectory = currentFile;
                         new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                     } else {
-                        if(mimeType != FileType.NONE) {
-                            String requiredExtension = getMimeTypeString(mimeType);
-                            if(requiredExtension.equalsIgnoreCase(fileExt(currentFile.toString()))) {
+                        if (mimeType != null) {
+                            MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+                            String requiredExtension = "." + mimeTypeMap.getExtensionFromMimeType(mimeType);
+                            if (requiredExtension.equalsIgnoreCase(fileExt(currentFile.toString()))) {
                                 data = new Intent();
                                 data.putExtra(FILE_EXTRA_DATA_PATH, currentFile.getAbsolutePath());
                                 setResult(RESULT_OK, data);
@@ -415,24 +419,22 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         openButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(currentFile.isDirectory()) {
+                if (currentFile.isDirectory()) {
                     curDirectory = currentFile;
                     directoryTitle.setText(curDirectory.getName());
 
                     new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                 } else {
-                    MimeTypeMap myMime = MimeTypeMap.getSingleton();
                     Intent newIntent = new Intent(android.content.Intent.ACTION_VIEW);
                     String file = currentFile.toString();
-                    if(file != null) {
-                        String mimeType = myMime.getMimeTypeFromExtension(fileExt(file).substring(1));
-                        newIntent.setDataAndType(Uri.fromFile(currentFile),mimeType);
+                    if (file != null) {
+                        newIntent.setDataAndType(Uri.fromFile(currentFile), mimeType);
                         newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         try {
                             startActivity(newIntent);
                         } catch (android.content.ActivityNotFoundException e) {
                             SnackbarManager.show(Snackbar.with(FilePickerActivity.this)
-                                .text("No handler for this type of file."));
+                                    .text("No handler for this type of file."));
                         }
                     } else {
                         SnackbarManager.show(Snackbar.with(FilePickerActivity.this)
@@ -449,51 +451,25 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         header = (RelativeLayout) findViewById(R.id.header_container);
     }
 
-    private String getMimeTypeString(FileType mimeType) {
-
-        if(mimeType == FileType.DOC) {
-            return ".doc";
-        } else if(mimeType == FileType.DOCX) {
-            return ".docx";
-        } else if(mimeType == FileType.HTML) {
-            return ".html";
-        } else if(mimeType == FileType.JPEG) {
-            return ".jpeg";
-        } else if(mimeType == FileType.PNG) {
-            return ".png";
-        } else if(mimeType == FileType.XLS) {
-            return ".xls";
-        } else if(mimeType == FileType.XML) {
-            return ".xml";
-        } else if(mimeType == FileType.JPG) {
-           return ".jpg";
-        } else if(mimeType == FileType.PDF) {
-            return ".pdf";
-        } else if(mimeType == FileType.TXT) {
-            return ".txt";
-        } else {
-            return ".xlsx";
-        }
-    }
-
     /**
      * Returns the file extension of a file.
+     *
      * @param url the file path
      * @return
      */
     private String fileExt(String url) {
-        if (url.indexOf("?")>-1) {
-            url = url.substring(0,url.indexOf("?"));
+        if (url.indexOf("?") > -1) {
+            url = url.substring(0, url.indexOf("?"));
         }
         if (url.lastIndexOf(".") == -1) {
             return null;
         } else {
-            String ext = url.substring(url.lastIndexOf(".") );
-            if (ext.indexOf("%")>-1) {
-                ext = ext.substring(0,ext.indexOf("%"));
+            String ext = url.substring(url.lastIndexOf("."));
+            if (ext.indexOf("%") > -1) {
+                ext = ext.substring(0, ext.indexOf("%"));
             }
-            if (ext.indexOf("/")>-1) {
-                ext = ext.substring(0,ext.indexOf("/"));
+            if (ext.indexOf("/") > -1) {
+                ext = ext.substring(0, ext.indexOf("/"));
             }
             return ext.toLowerCase();
 
@@ -512,7 +488,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             setResult(RESULT_CANCELED);
             finish();
         }
@@ -522,18 +498,18 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        if(l.getHeaderViewsCount() != 1) {
+        if (l.getHeaderViewsCount() != 1) {
             //adjust for list view header view.
             position += 1;
         }
-        if(position > 0) {
-            currentFile = files[position-1];
+        if (position > 0) {
+            currentFile = files[position - 1];
         }
         if (adapter.getSelectedPosition() == position) {
             hideButtons();
             adapter.setSelectedPosition(-1);
         } else {
-            adapter.setSelectedPosition(position-1);
+            adapter.setSelectedPosition(position - 1);
             showButtons();
         }
     }
@@ -542,7 +518,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      * Method that shows the sliding panel
      */
     private void showButtons() {
-        if(!areButtonsShowing) {
+        if (!areButtonsShowing) {
             buttonContainer.clearAnimation();
             buttonContainer.startAnimation(slideUp);
             buttonContainer.setVisibility(View.VISIBLE);
@@ -554,7 +530,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      * Method that hides the sliding panel
      */
     private void hideButtons() {
-        if(areButtonsShowing) {
+        if (areButtonsShowing) {
             buttonContainer.clearAnimation();
             buttonContainer.startAnimation(slideDown);
             buttonContainer.setVisibility(View.INVISIBLE);
@@ -565,16 +541,16 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     @Override
     public void onReturnFileName(String fileName) {
 
-        if(fileName.equalsIgnoreCase("") || fileName.isEmpty()) {
+        if (fileName.equalsIgnoreCase("") || fileName.isEmpty()) {
             fileName = null;
         }
-        if(fileName != null) {
+        if (fileName != null) {
             File file = new File(curDirectory.getPath() + "//" + fileName);
             boolean created = false;
-            if(!file.exists()) {
+            if (!file.exists()) {
                 created = file.mkdirs();
             }
-            if(created) {
+            if (created) {
                 new UpdateFilesTask(this).execute(curDirectory);
             }
         }
@@ -583,20 +559,21 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
     /**
      * Set the background color of the header
-     * @param colorResId Resource Id of the color
+     *
+     * @param colorResId    Resource Id of the color
      * @param drawableResId Resource Id of the drawable
      */
     private void setHeaderBackground(int colorResId, int drawableResId) {
-        if(drawableResId == -1) {
+        if (drawableResId == -1) {
             try {
                 header.setBackgroundColor(getResources().getColor(colorResId));
-            } catch(Resources.NotFoundException e) {
+            } catch (Resources.NotFoundException e) {
                 e.printStackTrace();
             }
         } else {
             try {
                 header.setBackgroundDrawable(getResources().getDrawable(drawableResId));
-            } catch(Resources.NotFoundException e) {
+            } catch (Resources.NotFoundException e) {
                 e.printStackTrace();
             }
         }
@@ -605,14 +582,15 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
     /**
      * Sets the theme for this activity
+     *
      * @param themeType the {@code ThemeType} enum set in the calling intent.
      */
     public void setThemeType(ThemeType themeType) {
-        if(themeType == ThemeType.ACTIVITY) {
+        if (themeType == ThemeType.ACTIVITY) {
             setTheme(android.R.style.Theme_Holo_Light);
-        } else if(themeType == ThemeType.DIALOG) {
+        } else if (themeType == ThemeType.DIALOG) {
             setTheme(android.R.style.Theme_Holo_Light_Dialog);
-        } else if(themeType == ThemeType.DIALOG_NO_ACTION_BAR) {
+        } else if (themeType == ThemeType.DIALOG_NO_ACTION_BAR) {
             setTheme(android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
         }
     }
@@ -657,7 +635,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         @Override
         protected void onPostExecute(File[] localFiles) {
             files = localFiles;
-            if(directory.getPath().equalsIgnoreCase(Environment
+            if (directory.getPath().equalsIgnoreCase(Environment
                     .getExternalStorageDirectory().getPath())) {
                 directoryTitle.setText("Parent Directory");
             } else {
@@ -665,17 +643,17 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
             }
             lastDirectory = directory.getParentFile();
             curDirectory = directory;
-            if(directory.listFiles().length > 0 && directoryExists(files)
+            if (directory.listFiles().length > 0 && directoryExists(files)
                     && listView.getHeaderViewsCount() == 0) {
                 listView.addHeaderView(listHeaderView);
-            } else if(directory.listFiles().length == 0 || !directoryExists(files)) {
-                if(listView.getHeaderViewsCount() == 1) {
+            } else if (directory.listFiles().length == 0 || !directoryExists(files)) {
+                if (listView.getHeaderViewsCount() == 1) {
                     listView.removeHeaderView(listHeaderView);
                 }
             }
             adapter = new FileListAdapter(FilePickerActivity.this, files, scopeType);
             setListAdapter(adapter);
-            if(dialog.isShowing()) {
+            if (dialog.isShowing()) {
                 dialog.dismiss();
             }
             super.onPostExecute(files);
@@ -683,12 +661,13 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
         /**
          * Checks if the files contain a directory.
+         *
          * @param files the files.
          * @return a boolean, true if there is a file that is a directory.
          */
         public boolean directoryExists(File[] files) {
-            for(int i = 0; i < files.length; i++) {
-                if(files[i].isDirectory()) {
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isDirectory()) {
                     return true;
                 }
             }
