@@ -23,7 +23,7 @@ Add the following code to your gradle build script.
 		mavenCentral()
 	}
 	dependencies {
-	  	'com.github.developerpaul123.filepickerlibrary:FPlib:1.+'
+	  	compile 'com.github.developerpaul123.filepickerlibrary:FPlib:1.+'
 	}
   ````
 
