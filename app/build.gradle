@@ -28,5 +28,5 @@ repositories {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':FPlib')
+    compile 'com.github.DeveloperPaul123:FilePickerLibrary:aa481686a8'
 }
