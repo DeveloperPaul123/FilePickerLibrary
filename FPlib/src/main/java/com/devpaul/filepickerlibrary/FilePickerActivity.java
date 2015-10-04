@@ -42,11 +42,12 @@ import com.devpaul.filepickerlibrary.adapter.FileListAdapter;
 import com.devpaul.filepickerlibrary.enums.FileScopeType;
 import com.devpaul.filepickerlibrary.enums.FileType;
 import com.devpaul.filepickerlibrary.enums.ThemeType;
-import com.devpaul.materialfabmenu.MaterialFloatingActionButton;
+import com.devpaul.materiallibrary.views.MaterialFloatingActionButton;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 
 import java.io.File;
+
 
 /**
  * Created by Paul Tsouchlos
@@ -245,6 +246,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+
         //get the theme type for this activity
         themeType = (ThemeType) getIntent().getSerializableExtra(THEME_TYPE);
         if (themeType == null) {
@@ -652,7 +654,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                 }
             }
             adapter = new FileListAdapter(FilePickerActivity.this, files, scopeType);
-            setListAdapter(adapter);
+            FilePickerActivity.this.setListAdapter(adapter);
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }

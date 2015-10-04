@@ -91,7 +91,7 @@
         <!--android:background="@drawable/circle"-->
         <!--android:layout_marginRight="10dip"/>-->
 
-    <com.devpaul.materialfabmenu.MaterialFloatingActionButton
+    <com.devpaul.materiallibrary.views.MaterialFloatingActionButton
         android:id="@+id/file_picker_add_button"
         android:layout_marginTop="54dp"
         android:layout_width="wrap_content"
