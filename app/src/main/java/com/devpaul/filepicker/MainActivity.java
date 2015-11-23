@@ -28,7 +28,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.devpaul.filepickerlibrary.FilePicker;
 import com.devpaul.filepickerlibrary.FilePickerActivity;
+import com.devpaul.filepickerlibrary.FilePickerBuilder;
 import com.devpaul.filepickerlibrary.enums.FileScopeType;
 import com.devpaul.filepickerlibrary.enums.FileType;
 import com.devpaul.filepickerlibrary.enums.ThemeType;
@@ -127,6 +129,27 @@ public class MainActivity extends Activity {
                     filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_green_dark);
                     filePicker.putExtra(FilePickerActivity.MIME_TYPE, FileType.PNG);
                     startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
+                }
+            });
+
+            Button newFilePicker = (Button) rootView.findViewById(R.id.new_file_picker_activity);
+            newFilePicker.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    new FilePickerBuilder(getActivity()).withColor(android.R.color.holo_blue_bright)
+                            .withRequestCode(FilePicker.REQUEST_FILE)
+                            .withScopeType(FileScopeType.ALL)
+                            .withMimeType(FileType.PNG)
+                            .useMaterialActivity(true)
+                            .launch();
+
+//                    Intent filePicker = new Intent(getActivity(), FilePicker.class);
+//                    filePicker.putExtra(FilePicker.SCOPE_TYPE, FileScopeType.ALL);
+//                    filePicker.putExtra(FilePicker.REQUEST_CODE, FilePicker.REQUEST_FILE);
+//                    filePicker.putExtra(FilePicker.INTENT_EXTRA_COLOR_ID, android.R.color.holo_green_dark);
+//                    filePicker.putExtra(FilePicker.MIME_TYPE, FileType.PNG);
+//                    startActivityForResult(filePicker, FilePicker.REQUEST_FILE);
                 }
             });
             return rootView;

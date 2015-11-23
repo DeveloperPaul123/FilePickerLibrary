@@ -144,9 +144,7 @@ public class FileListAdapter extends BaseAdapter {
                 TextView fileDate = (TextView) customView.findViewById(R.id.file_info_date_created);
                 TextView filePath = (TextView) customView.findViewById(R.id.file_info_path);
                 File file = fileList.get(position);
-                if(file.isDirectory()) {
-                    new GetFileSizeTask(fileSize, file, "Size: %d bytes").execute();
-                } else {
+                if(!file.isDirectory()) {
                     fileSize.setText("Size: " + file.length() + " bytes");
                 }
                 Calendar cal = Calendar.getInstance();
@@ -165,8 +163,6 @@ public class FileListAdapter extends BaseAdapter {
             viewHolder.fileTitle.setText(fileList.get(i).getName());
             if(!fileList.get(i).isDirectory()) {
                 viewHolder.fileInfo.setText("" + fileList.get(i).length() + " bytes");
-            } else {
-                new GetFileSizeTask(viewHolder.fileInfo, fileList.get(i), "%d bytes").execute();
             }
             String fileExt = fileExt(fileList.get(i).toString());
             if(fileList.get(i).isDirectory()) {
@@ -211,7 +207,6 @@ public class FileListAdapter extends BaseAdapter {
             if(fileList.get(i).isDirectory()) {
                 viewHolder.fileImage.setBackgroundDrawable(folderDrawable);
                 viewHolder.fileTitle.setText(fileList.get(i).getName());
-                new GetFileSizeTask(viewHolder.fileInfo, fileList.get(i), "%d bytes").execute();
             }
         }
         return view;
@@ -383,11 +378,13 @@ public class FileListAdapter extends BaseAdapter {
         private long getDirectorySize(File directory) {
             File[] files = directory.listFiles();
             int size = 0;
-            for(File file: files) {
-                if(file.isDirectory()) {
-                    size += getDirectorySize(file);
-                } else {
-                    size += file.length();
+            if(files != null) {
+                for(File file: files) {
+                    if(file.isDirectory()) {
+                        size += getDirectorySize(file);
+                    } else {
+                        size += file.length();
+                    }
                 }
             }
             return size;

@@ -38,4 +38,12 @@
         android:layout_below="@id/file_picker_dialog"
         android:text="FilePicker PNG Mime"/>
 
+    <Button
+        android:id="@+id/new_file_picker_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:layout_below="@id/file_picker_mime_png"
+        android:text="Material File Picker"/>
+
 </RelativeLayout>
