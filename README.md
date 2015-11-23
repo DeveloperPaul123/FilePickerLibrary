@@ -20,10 +20,11 @@ Alternatively you can use gradle.
 Add the following code to your gradle build script.
 ````java
 	repositories {
-		mavenCentral()
+		...
+		maven {url "https://jitpack.io"}
 	}
 	dependencies {
-	  	compile 'com.github.developerpaul123.filepickerlibrary:FPlib:1.+'
+	  	compile 'com.github.DeveloperPaul123:FilePickerLibrary:1.0.0'
 	}
   ````
 
