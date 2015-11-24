@@ -24,7 +24,7 @@ Add the following code to your gradle build script.
 		maven {url "https://jitpack.io"}
 	}
 	dependencies {
-	  	compile 'com.github.DeveloperPaul123:FilePickerLibrary:1.0.0'
+	  	compile 'com.github.DeveloperPaul123:FilePickerLibrary:2.0.0'
 	}
   ````
 
@@ -80,6 +80,18 @@ filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.ho
 filePicker.putExtra(FilePickerActivity.MIME_TYPE, FileType.PNG);
 startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
 ```
+
+Finally, you can now use a builder class to simplify intent creation:
+
+```java
+new FilePickerBuilder(getActivity()).withColor(android.R.color.holo_blue_bright)
+                            .withRequestCode(FilePicker.REQUEST_FILE)
+                            .withScopeType(FileScopeType.ALL)
+                            .withMimeType(FileType.PNG)
+                            .useMaterialActivity(true)
+                            .launch();
+```
+You can also call ` build() ` instead of ` launch() ` and you will get back an activity. Note that `launch()` starts the activity with `startActivityForResult() ` and uses the request code you passed into the builder as the request code for the activity result extra. So when listening for activity results be sure to use the same request code.
 
 <h2>Demo App</h2>
 * **Check out the sample on google play.**
