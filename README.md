@@ -9,7 +9,7 @@ Simple library that allows for picking of files and directories. This is a clean
 ![image] (images/main_framed.png)
 
 <h2>Requirements</h2>
-Min SDK Level is 14 or Android IceCreamSandwich
+Min SDK Level is 16
 
 <h2>Dependency</h2>
 
