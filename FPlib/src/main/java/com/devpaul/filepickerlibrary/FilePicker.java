@@ -1,18 +1,22 @@
 package com.devpaul.filepickerlibrary;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -24,6 +28,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.devpaul.filepickerlibrary.adapter.FileRecyclerViewAdapter;
 import com.devpaul.filepickerlibrary.enums.FileScopeType;
 import com.devpaul.filepickerlibrary.enums.FileType;
@@ -230,7 +235,14 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
      */
     private Context mContext;
 
+    /**
+     * Request code for app permissions.
+     */
+    private static final int REQUEST_FOR_READ_EXTERNAL_STORAGE = 101;
 
+    /**
+     * Layout manager for the Recycler View.
+     */
     private LinearLayoutManager mLinearLayoutManager;
 
     @Override
@@ -306,8 +318,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
                 if (Math.abs(dy) >= 5) {
                     if (dy > 0) {
                         toggleButton(false);
-                    }
-                    else if(dy < 0) {
+                    } else if (dy < 0) {
                         toggleButton(true);
                     }
                     if (areButtonsShowing) {
@@ -318,8 +329,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
                         hideButtons();
                         adapter.setSelectedPosition(-1);
                     }
-                }
-                else {
+                } else {
                     mLastFirstVisibleItem = firstVisibleItem;
                 }
                 super.onScrolled(recyclerView, dx, dy);
@@ -332,20 +342,80 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         //drawable has not been set so set the color.
         setHeaderBackground(colorId, drawableId);
 
+        //check for proper permissions.
+        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+            int permissionCheck = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE);
+            if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    //Show permission rationale.
+                    new MaterialDialog.Builder(FilePicker.this)
+                            .title(R.string.file_picker_permission_rationale_dialog_title)
+                            .content(R.string.file_picker_permission_rationale_dialog_content)
+                            .positiveText(R.string.file_picker_ok)
+                            .negativeText(R.string.file_picker_cancel)
+                            .callback(new MaterialDialog.ButtonCallback() {
+                                @Override
+                                public void onPositive(MaterialDialog dialog) {
+                                    ActivityCompat.requestPermissions(FilePicker.this,
+                                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                            REQUEST_FOR_READ_EXTERNAL_STORAGE);
+                                }
+
+                                @Override
+                                public void onNegative(MaterialDialog dialog) {
+                                    setResult(RESULT_CANCELED);
+                                    finish();
+                                }
+                            })
+                            .show();
+                }
+                else {
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_FOR_READ_EXTERNAL_STORAGE);
+                }
+            }
+        } else {
+            init();
+        }
+    }
+
+    /**
+     * Initialize the current directory.
+     */
+    private void init() {
         curDirectory = new File(Environment.getExternalStorageDirectory().getPath());
         currentFile = new File(curDirectory.getPath());
         lastDirectory = curDirectory.getParentFile();
 
         if (curDirectory.isDirectory()) {
-            Log.d("FILEPICKER", "Is directory");
             new UpdateFilesTask(this).execute(curDirectory);
         } else {
-            Log.d("FILEPICKER", "Is not directory");
             try {
-                throw new Exception("Initial file must be a directory.");
+                throw new Exception(getString(R.string.file_picker_directory_error));
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            //see if we got the permission.
+            case REQUEST_FOR_READ_EXTERNAL_STORAGE:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    init();
+                }
+                else {
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
+                return;
         }
     }
 
@@ -415,7 +485,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
                         finish();
                     } else {
                         SnackbarManager.show(Snackbar.with(FilePicker.this)
-                                .text("Please select a directory.")
+                                .text(R.string.file_picker_snackbar_select_directory_message)
                                 .duration(1500));
                     }
                 } else { //request code is for a file
@@ -433,7 +503,8 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
                                 finish();
                             } else {
                                 SnackbarManager.show(Snackbar.with(FilePicker.this)
-                                        .text("Please select a " + requiredExtension + " file.")
+                                        .text(String.format(getString(R.string.file_picker_snackbar_select_file_ext_message),
+                                                requiredExtension))
                                         .duration(1500));
                             }
                         } else {
@@ -465,11 +536,11 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
                             startActivity(newIntent);
                         } catch (android.content.ActivityNotFoundException e) {
                             SnackbarManager.show(Snackbar.with(FilePicker.this)
-                                    .text("No handler for this type of file."));
+                                    .text(R.string.file_picker_snackbar_no_file_type_handler));
                         }
                     } else {
                         SnackbarManager.show(Snackbar.with(FilePicker.this)
-                                .text("Couldn't get file type."));
+                                .text(R.string.file_picker_snackbar_no_read_type));
                     }
 
                 }
@@ -556,7 +627,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         if (fileName.equalsIgnoreCase("") || fileName.isEmpty()) {
             fileName = null;
         }
-        if (fileName != null) {
+        if (fileName != null && curDirectory != null) {
             File file = new File(curDirectory.getPath() + "//" + fileName);
             boolean created = false;
             if (!file.exists()) {
@@ -613,9 +684,8 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
 
         @Override
         protected void onPreExecute() {
-            Log.i("FilePicker", "AsyncCalled");
             dialog = new ProgressDialog(mContext);
-            dialog.setMessage("Loading...");
+            dialog.setMessage(getString(R.string.file_picker_progress_dialog_loading));
             dialog.setCancelable(false);
             dialog.show();
             hideButtons();
@@ -635,7 +705,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
             files = localFiles;
             if (directory.getPath().equalsIgnoreCase(Environment
                     .getExternalStorageDirectory().getPath())) {
-                toolbar.setTitle("Parent Directory");
+                toolbar.setTitle(getString(R.string.file_picker_default_directory_title));
 
             } else {
                 toolbar.setTitle(directory.getName());
@@ -647,9 +717,15 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
 //            for(int i = 0; i < files.length; i++) {
 //                adapter.addFile(files[i]);
 //            }
-            adapter = new FileRecyclerViewAdapter(FilePicker.this, files, scopeType, callback);
-            //TODO: Fix this, figure out how to add and remove the header.
-            recyclerView.setAdapter(adapter);
+            if(files != null) {
+                adapter = new FileRecyclerViewAdapter(FilePicker.this, files, scopeType, callback);
+                //TODO: Fix this, figure out how to add and remove the header.
+                recyclerView.setAdapter(adapter);
+            }
+            //make sure the button is showing.
+            if(!isFabShowing) {
+                toggleButton(true);
+            }
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }

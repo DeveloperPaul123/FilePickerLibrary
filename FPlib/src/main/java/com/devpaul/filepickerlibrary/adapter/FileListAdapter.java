@@ -22,7 +22,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +77,6 @@ public class FileListAdapter extends BaseAdapter {
             for(int i = 0; i < fileList.size(); i++) {
                String extension = fileExt(fileList.get(i).getPath());
                if(extension != null) {
-                   Log.d("FILELISTADAPTER", "Ext: " + extension);
                    fileList.remove(i);
                }
             }
@@ -145,16 +143,17 @@ public class FileListAdapter extends BaseAdapter {
                 TextView filePath = (TextView) customView.findViewById(R.id.file_info_path);
                 File file = fileList.get(position);
                 if(!file.isDirectory()) {
-                    fileSize.setText("Size: " + file.length() + " bytes");
+                    fileSize.setText(String.format(
+                            mContext.getString(R.string.file_picker_adapter_size_string),file.length()));
                 }
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(file.lastModified());
                 DateFormat df = SimpleDateFormat.getDateInstance();
-                fileDate.setText("Last Modified: " + df.format(cal.getTime()));
-                filePath.setText("Path: " + file.getAbsolutePath());
+                fileDate.setText(String.format(mContext.getString(R.string.file_picker_adapter_last_modified_string), df.format(cal.getTime())));
+                filePath.setText(String.format(mContext.getString(R.string.file_picker_adapter_file_path_string), file.getAbsolutePath()));
                 new MaterialDialog.Builder(v.getContext())
-                        .title("File: " + fileList.get(position).getName())
-                        .customView(customView, true)
+                        .title(String.format(mContext.getString(R.string.file_picker_file_info_dialog_file_path), fileList.get(position).getName()))
+                .customView(customView, true)
                         .show();
             }
         });
@@ -162,7 +161,7 @@ public class FileListAdapter extends BaseAdapter {
         if (mFileType == FileScopeType.ALL) {
             viewHolder.fileTitle.setText(fileList.get(i).getName());
             if(!fileList.get(i).isDirectory()) {
-                viewHolder.fileInfo.setText("" + fileList.get(i).length() + " bytes");
+                viewHolder.fileInfo.setText(String.format(mContext.getString(R.string.file_picker_adapter_file_size_only_string), fileList.get(i).length()));
             }
             String fileExt = fileExt(fileList.get(i).toString());
             if(fileList.get(i).isDirectory()) {

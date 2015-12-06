@@ -25,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.devpaul.filepickerlibrary.FilePicker;
@@ -34,6 +33,7 @@ import com.devpaul.filepickerlibrary.FilePickerBuilder;
 import com.devpaul.filepickerlibrary.enums.FileScopeType;
 import com.devpaul.filepickerlibrary.enums.FileType;
 import com.devpaul.filepickerlibrary.enums.ThemeType;
+import com.devpaul.materiallibrary.views.MaterialFlatButton;
 
 
 public class MainActivity extends Activity {
@@ -82,7 +82,7 @@ public class MainActivity extends Activity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-            Button filePickerActivity = (Button) rootView.findViewById(R.id.file_picker_activity);
+            MaterialFlatButton filePickerActivity = (MaterialFlatButton) rootView.findViewById(R.id.file_picker_activity);
 
             filePickerActivity.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,7 +95,7 @@ public class MainActivity extends Activity {
                 }
             });
 
-            Button filePickerForFile = (Button) rootView.findViewById(R.id.file_picker_return_file_path);
+            MaterialFlatButton filePickerForFile = (MaterialFlatButton) rootView.findViewById(R.id.file_picker_return_file_path);
 
             filePickerForFile.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
                 }
             });
 
-            Button filePickerDialog = (Button) rootView.findViewById(R.id.file_picker_dialog);
+            MaterialFlatButton filePickerDialog = (MaterialFlatButton) rootView.findViewById(R.id.file_picker_dialog);
             filePickerDialog.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -119,7 +119,7 @@ public class MainActivity extends Activity {
                 }
             });
 
-            Button filePickerMimePng = (Button) rootView.findViewById(R.id.file_picker_mime_png);
+            MaterialFlatButton filePickerMimePng = (MaterialFlatButton) rootView.findViewById(R.id.file_picker_mime_png);
             filePickerMimePng.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -132,7 +132,7 @@ public class MainActivity extends Activity {
                 }
             });
 
-            Button newFilePicker = (Button) rootView.findViewById(R.id.new_file_picker_activity);
+            MaterialFlatButton newFilePicker = (MaterialFlatButton) rootView.findViewById(R.id.new_file_picker_activity);
             newFilePicker.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

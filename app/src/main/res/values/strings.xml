@@ -2,10 +2,9 @@
 <resources>
 
     <string name="app_name">FilePickerDemo</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="file_picker_activity">FilePicker Activity</string>
-    <string name="return_file_path">Return File Path</string>
-    <string name="file_picker_dialog">FilePicker Dialog</string>
+    <string name="file_picker_activity">Activity</string>
+    <string name="return_file_path">Path</string>
+    <string name="file_picker_dialog">Dialog</string>
 
 </resources>
