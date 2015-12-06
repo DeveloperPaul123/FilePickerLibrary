@@ -24,7 +24,7 @@ Add the following code to your gradle build script.
 		maven {url "https://jitpack.io"}
 	}
 	dependencies {
-	  	compile 'com.github.DeveloperPaul123:FilePickerLibrary:2.0.1'
+	  	compile 'com.github.DeveloperPaul123:FilePickerLibrary:2.1'
 	}
   ````
 
