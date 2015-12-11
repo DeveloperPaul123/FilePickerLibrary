@@ -32,7 +32,7 @@ Add the following code to your gradle build script.
 Simply do the following.
 ```java
 Intent filePickerIntent = new Intent(this, FilePickerActivity.class);
-filePickerIntent.putIntExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
+filePickerIntent.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
 startActivityForResult(filePickerIntent, FilePickerActivity.REQUEST_DIRECTORY); 
 ```
 Make sure to add the int extra for your request code. You can also request for a file path instead of a directory. See the javadocs for more info. To get the file path do the following.
@@ -59,8 +59,8 @@ You can change the header background in the activity by adding resorce ids to yo
 
 ```java
 Intent filePickerIntent = new Intent(this, FilePickerActivity.class);
-filePickerIntent.putIntExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
-filePickerIntent.putIntExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, R.color.myColor);
+filePickerIntent.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
+filePickerIntent.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, R.color.myColor);
 startActivityForResult(filePickerIntent, FilePickerActivity.REQUEST_DIRECTORY); 
 ```
 You can also change the theme for the activity to make it look like a dialog.
