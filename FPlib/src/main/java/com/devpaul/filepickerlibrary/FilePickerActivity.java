@@ -41,7 +41,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devpaul.filepickerlibrary.adapter.FileListAdapter;
 import com.devpaul.filepickerlibrary.enums.FileScopeType;
@@ -343,11 +342,11 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         setHeaderBackground(colorId, drawableId);
 
         //check for proper permissions.
-        if(Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
             int permissionCheck = ContextCompat.checkSelfPermission(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE);
-            if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
-                if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     //Show permission rationale.
                     new MaterialDialog.Builder(FilePickerActivity.this)
                             .title(R.string.file_picker_permission_rationale_dialog_title)
@@ -370,13 +369,14 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                                 }
                             })
                             .show();
-                }
-                else {
+                } else {
                     ActivityCompat.requestPermissions(this,
                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                     Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             REQUEST_FOR_READ_EXTERNAL_STORAGE);
                 }
+            } else {
+                init();
             }
         } else {
             init();
@@ -405,12 +405,11 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
         switch (requestCode) {
             case REQUEST_FOR_READ_EXTERNAL_STORAGE:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                         grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted.
                     init();
-                }
-                else {
+                } else {
                     setResult(RESULT_CANCELED);
                     finish();
                 }
@@ -422,7 +421,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     @Override
     public void onBackPressed() {
         if (lastDirectory != null && !curDirectory.getPath()
-            .equals(Environment.getExternalStorageDirectory().getPath())) {
+                .equals(Environment.getExternalStorageDirectory().getPath())) {
             new UpdateFilesTask(FilePickerActivity.this).execute(lastDirectory);
         } else {
             setResult(RESULT_CANCELED);
@@ -721,7 +720,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
             }
             lastDirectory = directory.getParentFile();
             curDirectory = directory;
-            if(directory.listFiles() != null) {
+            if (directory.listFiles() != null) {
                 if (directory.listFiles().length > 0 && directoryExists(files)
                         && listView.getHeaderViewsCount() == 0) {
                     listView.addHeaderView(listHeaderView);
@@ -731,7 +730,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                     }
                 }
             }
-            if(files != null) {
+            if (files != null) {
                 adapter = new FileListAdapter(FilePickerActivity.this, files, scopeType);
                 FilePickerActivity.this.setListAdapter(adapter);
             }
