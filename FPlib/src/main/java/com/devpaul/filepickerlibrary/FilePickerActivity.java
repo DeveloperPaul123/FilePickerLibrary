@@ -467,7 +467,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         curDirectory = currentFile;
                         new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                     } else {
-                        if (mimeType != null) {
+                        if (mimeType != null && !mimeType.equalsIgnoreCase(FileType.NONE.getMimeType())) {
                             MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                             String requiredExtension = "." + mimeTypeMap.getExtensionFromMimeType(mimeType);
                             if (requiredExtension.equalsIgnoreCase(fileExt(currentFile.toString()))) {
