@@ -12,8 +12,8 @@ import com.github.developerpaul123.filepickerlibrary.enums.FileType;
  */
 public class FilePickerBuilder {
 
-    boolean useMaterial;
     private final Activity mActivity;
+    boolean useMaterial;
     private FileScopeType mType;
     private int requestCode;
     private int color;
@@ -90,10 +90,7 @@ public class FilePickerBuilder {
         return this;
     }
 
-    /**
-     * Builds and starts the intent with startActivityForResult() uses the
-     * request code you said as the request code for the activity result.
-     */
+    @Deprecated
     public void launch() {
         Intent intent = build();
         mActivity.startActivityForResult(intent, requestCode);
@@ -111,5 +108,15 @@ public class FilePickerBuilder {
         filePicker.putExtra(FilePicker.INTENT_EXTRA_COLOR_ID, color);
         filePicker.putExtra(FilePicker.MIME_TYPE, mimeType);
         return filePicker;
+    }
+
+    /**
+     * Builds and starts the intent with startActivityForResult() uses the request code you said as the request code for the activity result.
+     *
+     * @param requestCode
+     */
+    public void launch(int requestCode) {
+        Intent intent = build();
+        mActivity.startActivityForResult(intent, requestCode);
     }
 }
