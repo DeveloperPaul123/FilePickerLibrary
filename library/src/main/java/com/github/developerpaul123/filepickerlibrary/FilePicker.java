@@ -206,7 +206,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
     /**
      * Request code for this activity
      */
-    private int requestCode;
+    private Request requestCode;
     /**
      * {@code Intent} used to send back the data to the calling activity
      */
@@ -285,7 +285,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
             //set default if it is null
             scopeType = Scope.ALL;
         }
-        requestCode = givenIntent.getIntExtra(REQUEST_CODE, Request.DIRECTORY.ordinal());
+        requestCode = (Request) givenIntent.getSerializableExtra(REQUEST_CODE);
 
         colorId = givenIntent.getIntExtra(INTENT_EXTRA_COLOR_ID, android.R.color.holo_blue_light);
         drawableId = givenIntent.getIntExtra(INTENT_EXTRA_DRAWABLE_ID, -1);
@@ -466,7 +466,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (requestCode == Request.DIRECTORY.ordinal()) {
+                if (requestCode == Request.DIRECTORY) {
                     if (currentFile.isDirectory()) {
                         curDirectory = currentFile;
                         data = new Intent();

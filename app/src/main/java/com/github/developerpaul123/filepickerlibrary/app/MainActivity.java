@@ -29,18 +29,18 @@ import android.widget.Toast;
 
 import com.devpaul.filepicker.R;
 import com.devpaul.materiallibrary.views.MaterialFlatButton;
-import com.github.developerpaul123.filepickerlibrary.FilePicker;
 import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
 import com.github.developerpaul123.filepickerlibrary.FilePickerBuilder;
+import com.github.developerpaul123.filepickerlibrary.enums.FileType;
 import com.github.developerpaul123.filepickerlibrary.enums.Request;
 import com.github.developerpaul123.filepickerlibrary.enums.Scope;
-import com.github.developerpaul123.filepickerlibrary.enums.FileType;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private static int REQUEST_FILE = 10;
+    static int REQUEST_FILE = 10;
+    static int REQUEST_DIRECTORY = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +84,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-            if (requestCode == FilePickerActivity.REQUEST_DIRECTORY && resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_DIRECTORY && resultCode == RESULT_OK) {
                 Toast.makeText(getActivity(), "File Selected: " + data
                                 .getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH),
                         Toast.LENGTH_LONG).show();
-            } else if (requestCode == FilePickerActivity.REQUEST_FILE && resultCode == RESULT_OK) {
+            } else if (requestCode == REQUEST_FILE && resultCode == RESULT_OK) {
                 Toast.makeText(getActivity(), "File Selected: " + data
                                 .getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH),
                         Toast.LENGTH_LONG).show();
@@ -108,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent filePickerActivity = new Intent(getActivity(), FilePickerActivity.class);
                     filePickerActivity.putExtra(FilePickerActivity.SCOPE_TYPE, Scope.ALL);
-                    filePickerActivity.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
+                    filePickerActivity.putExtra(FilePickerActivity.REQUEST_CODE, Request.DIRECTORY);
                     filePickerActivity.putExtra(FilePickerActivity.INTENT_EXTRA_FAB_COLOR_ID, android.R.color.holo_green_dark);
-                    startActivityForResult(filePickerActivity, FilePickerActivity.REQUEST_DIRECTORY);
+                    startActivityForResult(filePickerActivity, REQUEST_DIRECTORY);
                 }
             });
 
