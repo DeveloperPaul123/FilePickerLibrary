@@ -31,7 +31,7 @@ import com.devpaul.filepicker.R;
 import com.devpaul.materiallibrary.views.MaterialFlatButton;
 import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
 import com.github.developerpaul123.filepickerlibrary.FilePickerBuilder;
-import com.github.developerpaul123.filepickerlibrary.enums.FileType;
+import com.github.developerpaul123.filepickerlibrary.enums.MimeType;
 import com.github.developerpaul123.filepickerlibrary.enums.Request;
 import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
@@ -83,17 +83,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
 
-            if (requestCode == REQUEST_DIRECTORY && resultCode == RESULT_OK) {
-                Toast.makeText(getActivity(), "File Selected: " + data
+            if ((requestCode == REQUEST_DIRECTORY) && (resultCode == RESULT_OK)) {
+                Toast.makeText(getActivity(), "Directory Selected: " + data
                                 .getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH),
                         Toast.LENGTH_LONG).show();
-            } else if (requestCode == REQUEST_FILE && resultCode == RESULT_OK) {
+            } else if ((requestCode == REQUEST_FILE) && (resultCode == RESULT_OK)) {
                 Toast.makeText(getActivity(), "File Selected: " + data
                                 .getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH),
                         Toast.LENGTH_LONG).show();
             }
-            super.onActivityResult(requestCode, resultCode, data);
         }
 
         @Override
@@ -107,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent filePickerActivity = new Intent(getActivity(), FilePickerActivity.class);
-                    filePickerActivity.putExtra(FilePickerActivity.SCOPE_TYPE, Scope.ALL);
-                    filePickerActivity.putExtra(FilePickerActivity.REQUEST_CODE, Request.DIRECTORY);
+                    filePickerActivity.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
+                    filePickerActivity.putExtra(FilePickerActivity.REQUEST, Request.DIRECTORY);
                     filePickerActivity.putExtra(FilePickerActivity.INTENT_EXTRA_FAB_COLOR_ID, android.R.color.holo_green_dark);
                     startActivityForResult(filePickerActivity, REQUEST_DIRECTORY);
                 }
@@ -120,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent filePicker = new Intent(getActivity(), FilePickerActivity.class);
-                    filePicker.putExtra(FilePickerActivity.SCOPE_TYPE, Scope.ALL);
-                    filePicker.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
+                    filePicker.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
+                    filePicker.putExtra(FilePickerActivity.REQUEST, Request.FILE);
                     filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_orange_dark);
-                    startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
+                    startActivityForResult(filePicker, REQUEST_FILE);
                 }
             });
 
@@ -133,8 +133,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent filePickerDialogIntent = new Intent(getActivity(), FilePickerActivity.class);
                     filePickerDialogIntent.putExtra(FilePickerActivity.THEME_TYPE, ThemeType.DIALOG);
-                    filePickerDialogIntent.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
-                    startActivityForResult(filePickerDialogIntent, FilePickerActivity.REQUEST_FILE);
+                    filePickerDialogIntent.putExtra(FilePickerActivity.REQUEST, Request.FILE);
+                    startActivityForResult(filePickerDialogIntent, REQUEST_FILE);
                 }
             });
 
@@ -143,11 +143,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent filePicker = new Intent(getActivity(), FilePickerActivity.class);
-                    filePicker.putExtra(FilePickerActivity.SCOPE_TYPE, Scope.ALL);
-                    filePicker.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
+                    filePicker.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
+                    filePicker.putExtra(FilePickerActivity.REQUEST, Request.FILE);
                     filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_green_dark);
-                    filePicker.putExtra(FilePickerActivity.MIME_TYPE, FileType.PNG);
-                    startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
+                    filePicker.putExtra(FilePickerActivity.MIME_TYPE, MimeType.PNG);
+                    startActivityForResult(filePicker, REQUEST_FILE);
                 }
             });
 
@@ -158,8 +158,8 @@ public class MainActivity extends AppCompatActivity {
 
                     new FilePickerBuilder(getActivity()).withColor(android.R.color.holo_blue_bright)
                             .withRequest(Request.FILE)
-                            .withScopeType(Scope.ALL)
-                            .withMimeType(FileType.JPEG)
+                            .withScope(Scope.ALL)
+                            .withMimeType(MimeType.JPEG)
                             .useMaterialActivity(true)
                             .launch(REQUEST_FILE);
                 }

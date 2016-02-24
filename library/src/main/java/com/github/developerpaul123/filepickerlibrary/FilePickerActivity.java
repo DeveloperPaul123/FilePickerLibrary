@@ -49,7 +49,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devpaul.materiallibrary.views.MaterialFloatingActionButton;
 import com.github.developerpaul123.filepickerlibrary.adapter.FileListAdapter;
-import com.github.developerpaul123.filepickerlibrary.enums.FileType;
+import com.github.developerpaul123.filepickerlibrary.enums.MimeType;
 import com.github.developerpaul123.filepickerlibrary.enums.Request;
 import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
@@ -69,17 +69,17 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     public static final int REQUEST_FILE = 102;
 
     /**
-     * Constant value for adding the REQUEST_CODE int as an extra to the {@code FilePickerActivity}
+     * Constant value for adding the REQUEST int as an extra to the {@code FilePickerActivity}
      * {@code Intent}
      */
-    public static final String REQUEST_CODE = "requestCode";
+    public static final String REQUEST = "request";
 
     /**
-     * Constant value for adding the SCOPE_TYPE enum as an extra to the {@code FilePickerActivity}
+     * Constant value for adding the SCOPE enum as an extra to the {@code FilePickerActivity}
      * {@code Intent} The default is {@code FileType.ALL} see
      * {@link Scope} for other types.
      */
-    public static final String SCOPE_TYPE = "scopeType";
+    public static final String SCOPE = "scope";
 
     /**
      * Constant label value for sending a color id extra in the calling intent for this
@@ -262,8 +262,8 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         Object rawMimeTypeParameter = getIntent().getExtras().get(MIME_TYPE);
         if (rawMimeTypeParameter instanceof String) {
             mimeType = (String) rawMimeTypeParameter;
-        } else if (rawMimeTypeParameter instanceof FileType) {
-            mimeType = ((FileType) rawMimeTypeParameter).getMimeType();
+        } else if (rawMimeTypeParameter instanceof MimeType) {
+            mimeType = ((MimeType) rawMimeTypeParameter).getMimeType();
         } else {
             mimeType = null;
         }
@@ -275,12 +275,12 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
         //get the scope type and request code. Defaults are all files and request of a directory
         //path.
-        scopeType = (Scope) givenIntent.getSerializableExtra(SCOPE_TYPE);
+        scopeType = (Scope) givenIntent.getSerializableExtra(SCOPE);
         if (scopeType == null) {
             //set default if it is null
             scopeType = Scope.ALL;
         }
-        requestCode = (Request) givenIntent.getSerializableExtra(REQUEST_CODE);
+        requestCode = (Request) givenIntent.getSerializableExtra(REQUEST);
 
         colorId = givenIntent.getIntExtra(INTENT_EXTRA_COLOR_ID, android.R.color.holo_blue_light);
         drawableId = givenIntent.getIntExtra(INTENT_EXTRA_DRAWABLE_ID, -1);
@@ -463,7 +463,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         curDirectory = currentFile;
                         new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                     } else {
-                        if (mimeType != null && !mimeType.equalsIgnoreCase(FileType.NONE.getMimeType())) {
+                        if (mimeType != null && !mimeType.equalsIgnoreCase(MimeType.NONE.getMimeType())) {
                             MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                             String requiredExtension = "." + mimeTypeMap.getExtensionFromMimeType(mimeType);
                             if (requiredExtension.equalsIgnoreCase(fileExt(currentFile.toString()))) {

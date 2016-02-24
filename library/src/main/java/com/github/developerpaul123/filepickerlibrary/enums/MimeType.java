@@ -19,19 +19,19 @@ package com.github.developerpaul123.filepickerlibrary.enums;
 /**
  * Created by Paul Tsouchlos
  */
-public enum FileType {
+public enum MimeType {
     NONE(""), JPEG("image/jpeg"), PNG("image/png"), XML("application/xml"),
     XLS("application/vnd.ms-excel"), XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
     DOC("application/msword"), DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-    HTML("text/html"), TXT("text/plain"), PDF("application/pdf"), ;
+    HTML("text/html"), TXT("text/plain"), PDF("application/pdf");
 
-    private final String mimeType;
+    private final String mMimeType;
 
-    FileType(String mimeType) {
-        this.mimeType = mimeType;
+    MimeType(String mimeType) {
+        mMimeType = mimeType;
     }
 
     public String getMimeType() {
-        return mimeType;
+        return mMimeType;
     }
 }

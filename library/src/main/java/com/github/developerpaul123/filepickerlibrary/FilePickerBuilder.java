@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.ColorRes;
 
-import com.github.developerpaul123.filepickerlibrary.enums.FileType;
+import com.github.developerpaul123.filepickerlibrary.enums.MimeType;
 import com.github.developerpaul123.filepickerlibrary.enums.Request;
 import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 
@@ -19,7 +19,7 @@ public class FilePickerBuilder {
     private Scope mScope = Scope.ALL;
     private Request requestCode = Request.FILE;
     private int color = android.R.color.holo_blue_bright;
-    private FileType mimeType = FileType.NONE;
+    private MimeType mimeType = MimeType.NONE;
 
     /**
      * Builder class to build a filepicker activity.
@@ -30,13 +30,19 @@ public class FilePickerBuilder {
         mContext = context;
     }
 
+    @Deprecated
+    public FilePickerBuilder withScopeType(Scope type) {
+        mScope = type;
+        return this;
+    }
+
     /**
      * Set the scopetype of the file picker.
      *
      * @param type scope type. Can be DIRECTORIES or ALL.
      * @return the current builder instance.
      */
-    public FilePickerBuilder withScopeType(Scope type) {
+    public FilePickerBuilder withScope(Scope type) {
         mScope = type;
         return this;
     }
@@ -48,7 +54,7 @@ public class FilePickerBuilder {
      * @param request
      * @return
      */
-    public FilePickerBuilder withRequest(Request request){
+    public FilePickerBuilder withRequest(Request request) {
         requestCode = request;
         return this;
     }
@@ -71,7 +77,7 @@ public class FilePickerBuilder {
      * @param type the mime type.
      * @return current instance of the builder.
      */
-    public FilePickerBuilder withMimeType(FileType type) {
+    public FilePickerBuilder withMimeType(MimeType type) {
         mimeType = type;
         return this;
     }
@@ -100,8 +106,8 @@ public class FilePickerBuilder {
      */
     public Intent build() {
         Intent filePicker = new Intent(mContext, useMaterial ? FilePicker.class : FilePickerActivity.class);
-        filePicker.putExtra(FilePicker.SCOPE_TYPE, mScope);
-        filePicker.putExtra(FilePicker.REQUEST_CODE, requestCode);
+        filePicker.putExtra(FilePicker.SCOPE, mScope);
+        filePicker.putExtra(FilePicker.REQUEST, requestCode);
         filePicker.putExtra(FilePicker.INTENT_EXTRA_COLOR_ID, color);
         filePicker.putExtra(FilePicker.MIME_TYPE, mimeType);
         return filePicker;
