@@ -33,8 +33,9 @@ import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.developerpaul123.filepickerlibrary.adapter.FileRecyclerViewAdapter;
-import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.FileType;
+import com.github.developerpaul123.filepickerlibrary.enums.Request;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
 
 import java.io.File;
@@ -43,16 +44,6 @@ import java.io.File;
  * Created by Paul on 10/8/2015.
  */
 public class FilePicker extends AppCompatActivity implements NameFileDialogInterface {
-
-    /**
-     * Request code for when you want the file path to a directory.
-     */
-    public static final int REQUEST_DIRECTORY = 101;
-
-    /**
-     * Request code for when you want the file path to a specific file.
-     */
-    public static final int REQUEST_FILE = 102;
 
     /**
      * Constant value for adding the REQUEST_CODE int as an extra to the {@code FilePickerActivity}
@@ -294,7 +285,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
             //set default if it is null
             scopeType = Scope.ALL;
         }
-        requestCode = givenIntent.getIntExtra(REQUEST_CODE, REQUEST_DIRECTORY);
+        requestCode = givenIntent.getIntExtra(REQUEST_CODE, Request.DIRECTORY.ordinal());
 
         colorId = givenIntent.getIntExtra(INTENT_EXTRA_COLOR_ID, android.R.color.holo_blue_light);
         drawableId = givenIntent.getIntExtra(INTENT_EXTRA_DRAWABLE_ID, -1);
@@ -475,7 +466,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (requestCode == REQUEST_DIRECTORY) {
+                if (requestCode == Request.DIRECTORY.ordinal()) {
                     if (currentFile.isDirectory()) {
                         curDirectory = currentFile;
                         data = new Intent();

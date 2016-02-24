@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.annotation.ColorRes;
 
 import com.github.developerpaul123.filepickerlibrary.enums.FileType;
+import com.github.developerpaul123.filepickerlibrary.enums.Request;
 import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 
 /**
@@ -16,7 +17,7 @@ public class FilePickerBuilder {
     private final Context mContext;
     private boolean useMaterial;
     private Scope mScope = Scope.ALL;
-    private int requestCode = FilePicker.REQUEST_FILE;
+    private Request requestCode = Request.FILE;
     private int color = android.R.color.holo_blue_bright;
     private FileType mimeType = FileType.NONE;
 
@@ -44,11 +45,11 @@ public class FilePickerBuilder {
      * Set the request code of this. You can request a path to a file or
      * a directory.
      *
-     * @param requestCode the request code can be FilePicker.DIRECTORY or FilePicker.FILE.
-     * @return current instance of the builder.
+     * @param request
+     * @return
      */
-    public FilePickerBuilder withRequestCode(int requestCode) {
-        this.requestCode = requestCode;
+    public FilePickerBuilder withRequest(Request request){
+        requestCode = request;
         return this;
     }
 
@@ -89,7 +90,7 @@ public class FilePickerBuilder {
     @Deprecated
     public void launch() {
         Intent intent = build();
-        ((Activity) mContext).startActivityForResult(intent, requestCode);
+        ((Activity) mContext).startActivityForResult(intent, requestCode.ordinal());
     }
 
     /**
