@@ -20,10 +20,10 @@ package com.github.developerpaul123.filepickerlibrary.enums;
  * Created by Paul Tsouchlos
  */
 public enum FileType {
-    NONE(""), JPEG("image/jpeg"), JPG("image/jpeg"), PNG("image/png"), XML("application/xml"),
+    NONE(""), JPEG("image/jpeg"), PNG("image/png"), XML("application/xml"),
     XLS("application/vnd.ms-excel"), XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
     DOC("application/msword"), DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-    HTML("text/html"), TXT("text/plain"), PDF("application/pdf");
+    HTML("text/html"), TXT("text/plain"), PDF("application/pdf"), ;
 
     private final String mimeType;
 
