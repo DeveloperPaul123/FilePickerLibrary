@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -44,6 +45,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devpaul.materiallibrary.views.MaterialFloatingActionButton;
 import com.github.developerpaul123.filepickerlibrary.adapter.FileListAdapter;
@@ -338,17 +340,18 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                             .content(R.string.file_picker_permission_rationale_dialog_content)
                             .positiveText(R.string.file_picker_ok)
                             .negativeText(R.string.file_picker_cancel)
-                            .callback(new MaterialDialog.ButtonCallback() {
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
-                                public void onPositive(MaterialDialog dialog) {
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     ActivityCompat.requestPermissions(FilePickerActivity.this,
                                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                                     Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                             REQUEST_FOR_READ_EXTERNAL_STORAGE);
                                 }
-
+                            })
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
                                 @Override
-                                public void onNegative(MaterialDialog dialog) {
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     setResult(RESULT_CANCELED);
                                     finish();
                                 }
@@ -393,8 +396,8 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
         switch (requestCode) {
             case REQUEST_FOR_READ_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED) &&
+                        (grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                     //permission granted.
                     init();
                 } else {
@@ -473,7 +476,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                                 setResult(RESULT_OK, data);
                                 finish();
                             } else {
-                                Snackbar.make(getWindow().getDecorView(), String.format(getString(R.string.file_picker_snackbar_select_file_ext_message),requiredExtension), Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(getWindow().getDecorView(), String.format(getString(R.string.file_picker_snackbar_select_file_ext_message), requiredExtension), Snackbar.LENGTH_SHORT).show();
                             }
                         } else {
                             data = new Intent();
