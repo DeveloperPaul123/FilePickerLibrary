@@ -1,36 +1,32 @@
 package com.github.developerpaul123.filepickerlibrary;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.ColorRes;
 
-import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.FileType;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 
 /**
  * Created by Paul on 11/23/2015.
  */
 public class FilePickerBuilder {
 
-    private final Activity mActivity;
-    boolean useMaterial;
-    private Scope mScope;
-    private int requestCode;
-    private int color;
-    private FileType mimeType;
+    private final Context mContext;
+    private boolean useMaterial;
+    private Scope mScope = Scope.ALL;
+    private int requestCode = FilePicker.REQUEST_FILE;
+    private int color = android.R.color.holo_blue_bright;
+    private FileType mimeType = FileType.NONE;
 
     /**
      * Builder class to build a filepicker activity.
      *
-     * @param activity the calling activity.
+     * @param context the calling activity.
      */
-    public FilePickerBuilder(Activity activity) {
-        color = android.R.color.holo_blue_bright;
-        mScope = Scope.ALL;
-        mimeType = FileType.NONE;
-        requestCode = FilePicker.REQUEST_FILE;
-        mActivity = activity;
-        useMaterial = false;
+    public FilePickerBuilder(Context context) {
+        mContext = context;
     }
 
     /**
@@ -93,7 +89,7 @@ public class FilePickerBuilder {
     @Deprecated
     public void launch() {
         Intent intent = build();
-        mActivity.startActivityForResult(intent, requestCode);
+        ((Activity) mContext).startActivityForResult(intent, requestCode);
     }
 
     /**
@@ -102,7 +98,7 @@ public class FilePickerBuilder {
      * @return a filepicker intent.
      */
     public Intent build() {
-        Intent filePicker = new Intent(mActivity, useMaterial ? FilePicker.class : FilePickerActivity.class);
+        Intent filePicker = new Intent(mContext, useMaterial ? FilePicker.class : FilePickerActivity.class);
         filePicker.putExtra(FilePicker.SCOPE_TYPE, mScope);
         filePicker.putExtra(FilePicker.REQUEST_CODE, requestCode);
         filePicker.putExtra(FilePicker.INTENT_EXTRA_COLOR_ID, color);
@@ -117,6 +113,6 @@ public class FilePickerBuilder {
      */
     public void launch(int requestCode) {
         Intent intent = build();
-        mActivity.startActivityForResult(intent, requestCode);
+        ((Activity) mContext).startActivityForResult(intent, requestCode);
     }
 }
