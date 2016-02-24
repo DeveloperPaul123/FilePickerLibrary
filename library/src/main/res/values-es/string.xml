@@ -1,0 +1,20 @@
+<resources>
+    <string name="file_picker_permission_rationale_dialog_title">Permisos de almacenamiento de Lectura/Escritura</string>
+    <string name="file_picker_permission_rationale_dialog_content">Necesitas permisos de lectura/escritura para acceder a los ficheros</string>
+    <string name="file_picker_ok">OK</string>
+    <string name="file_picker_cancel">Cancelar</string>
+    <string name="file_picker_directory_error">El fichero inicial debe ser un directorio.</string>
+    <string name="file_picker_snackbar_select_directory_message">Por favor seleccione un directorio.</string>
+    <string name="file_picker_snackbar_select_file_ext_message">Por favor seleccione un fichero %s</string>
+    <string name="file_picker_snackbar_no_file_type_handler">No hay aplicación para este tipo de fichero.</string>
+    <string name="file_picker_snackbar_no_read_type">No puede obtener el tipo de fichero.</string>
+    <string name="file_picker_progress_dialog_loading">Cargando…</string>
+    <string name="file_picker_default_directory_title">Directorio Padre</string>
+    <string name="file_picker_adapter_size_string">Tamaño: %d bytes</string>
+    <string name="file_picker_adapter_last_modified_string">Última modificación: %s</string>
+    <string name="file_picker_adapter_file_path_string">Ruta: %s</string>
+    <string name="file_picker_adapter_file_size_only_string">%d bytes</string>
+    <string name="file_picker_file_info_dialog_file_path">Fichero: %s</string>
+    <string name="file_picker_recycler_adapter_view_holder_type_error">No hay tipos que coincidan con ese tipo.</string>
+    <item name="POSITION_KEY" type="id"/>
+</resources>
