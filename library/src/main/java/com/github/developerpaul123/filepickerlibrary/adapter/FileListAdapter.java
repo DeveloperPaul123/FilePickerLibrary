@@ -37,7 +37,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
