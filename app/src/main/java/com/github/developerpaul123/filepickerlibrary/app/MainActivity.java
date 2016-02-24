@@ -19,9 +19,6 @@ package com.github.developerpaul123.filepickerlibrary.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.devpaul.filepicker.R;
@@ -33,80 +30,77 @@ import com.github.developerpaul123.filepickerlibrary.enums.Request;
 import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class MainActivity extends AppCompatActivity {
 
     static int REQUEST_FILE = 10;
     static int REQUEST_DIRECTORY = 11;
+    @Bind(R.id.file_picker_activity)
+    MaterialFlatButton activitySample;
+    @Bind(R.id.file_picker_return_file_path)
+    MaterialFlatButton returnFilePathSample;
+    @Bind(R.id.file_picker_dialog)
+    MaterialFlatButton dialogSample;
+    @Bind(R.id.file_picker_mime_png)
+    MaterialFlatButton mimePngSample;
+    @Bind(R.id.new_file_picker_activity)
+    MaterialFlatButton materialSample;
+
+    @OnClick(R.id.file_picker_mime_png)
+    void mimePngSample() {
+        Intent filePicker = new Intent(this, FilePickerActivity.class);
+        filePicker.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
+        filePicker.putExtra(FilePickerActivity.REQUEST, Request.FILE);
+        filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_green_dark);
+        filePicker.putExtra(FilePickerActivity.MIME_TYPE, MimeType.PNG);
+        startActivityForResult(filePicker, REQUEST_FILE);
+    }
+
+    @OnClick(R.id.new_file_picker_activity)
+    void materialSample() {
+        new FilePickerBuilder(this).withColor(android.R.color.holo_blue_bright)
+                .withRequest(Request.FILE)
+                .withScope(Scope.ALL)
+                .withMimeType(MimeType.JPEG)
+                .useMaterialActivity(true)
+                .launch(REQUEST_FILE);
+    }
+
+    @OnClick(R.id.file_picker_dialog)
+    void dialogSample() {
+        Intent filePickerDialogIntent = new Intent(this, FilePickerActivity.class);
+        filePickerDialogIntent.putExtra(FilePickerActivity.THEME_TYPE, ThemeType.DIALOG);
+        filePickerDialogIntent.putExtra(FilePickerActivity.REQUEST, Request.FILE);
+        startActivityForResult(filePickerDialogIntent, REQUEST_FILE);
+    }
+
+    @OnClick(R.id.file_picker_activity)
+    void activitySample() {
+        Intent filePickerActivity = new Intent(this, FilePickerActivity.class);
+        filePickerActivity.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
+        filePickerActivity.putExtra(FilePickerActivity.REQUEST, Request.DIRECTORY);
+        filePickerActivity.putExtra(FilePickerActivity.INTENT_EXTRA_FAB_COLOR_ID, android.R.color.holo_green_dark);
+        startActivityForResult(filePickerActivity, REQUEST_DIRECTORY);
+    }
+
+    @OnClick(R.id.file_picker_return_file_path)
+    void returnFilePathSample() {
+        Intent filePicker = new Intent(this, FilePickerActivity.class);
+        filePicker.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
+        filePicker.putExtra(FilePickerActivity.REQUEST, Request.FILE);
+        filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_orange_dark);
+        startActivityForResult(filePicker, REQUEST_FILE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        MaterialFlatButton filePickerActivity = (MaterialFlatButton) findViewById(R.id.file_picker_activity);
-
-        filePickerActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent filePickerActivity = new Intent(MainActivity.this, FilePickerActivity.class);
-                filePickerActivity.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
-                filePickerActivity.putExtra(FilePickerActivity.REQUEST, Request.DIRECTORY);
-                filePickerActivity.putExtra(FilePickerActivity.INTENT_EXTRA_FAB_COLOR_ID, android.R.color.holo_green_dark);
-                startActivityForResult(filePickerActivity, REQUEST_DIRECTORY);
-            }
-        });
-
-        MaterialFlatButton filePickerForFile = (MaterialFlatButton) findViewById(R.id.file_picker_return_file_path);
-
-        filePickerForFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent filePicker = new Intent(MainActivity.this, FilePickerActivity.class);
-                filePicker.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
-                filePicker.putExtra(FilePickerActivity.REQUEST, Request.FILE);
-                filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_orange_dark);
-                startActivityForResult(filePicker, REQUEST_FILE);
-            }
-        });
-
-        MaterialFlatButton filePickerDialog = (MaterialFlatButton) findViewById(R.id.file_picker_dialog);
-        filePickerDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent filePickerDialogIntent = new Intent(MainActivity.this, FilePickerActivity.class);
-                filePickerDialogIntent.putExtra(FilePickerActivity.THEME_TYPE, ThemeType.DIALOG);
-                filePickerDialogIntent.putExtra(FilePickerActivity.REQUEST, Request.FILE);
-                startActivityForResult(filePickerDialogIntent, REQUEST_FILE);
-            }
-        });
-
-        MaterialFlatButton filePickerMimePng = (MaterialFlatButton) findViewById(R.id.file_picker_mime_png);
-        filePickerMimePng.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent filePicker = new Intent(MainActivity.this, FilePickerActivity.class);
-                filePicker.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
-                filePicker.putExtra(FilePickerActivity.REQUEST, Request.FILE);
-                filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_green_dark);
-                filePicker.putExtra(FilePickerActivity.MIME_TYPE, MimeType.PNG);
-                startActivityForResult(filePicker, REQUEST_FILE);
-            }
-        });
-
-        MaterialFlatButton newFilePicker = (MaterialFlatButton) findViewById(R.id.new_file_picker_activity);
-        newFilePicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                new FilePickerBuilder(MainActivity.this).withColor(android.R.color.holo_blue_bright)
-                        .withRequest(Request.FILE)
-                        .withScope(Scope.ALL)
-                        .withMimeType(MimeType.JPEG)
-                        .useMaterialActivity(true)
-                        .launch(REQUEST_FILE);
-            }
-        });
+        ButterKnife.bind(this);
     }
 
     @Override
