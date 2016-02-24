@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                             .withScopeType(Scope.ALL)
                             .withMimeType(FileType.JPEG)
                             .useMaterialActivity(true)
-                            .launch();
+                            .launch(FilePicker.REQUEST_FILE);
 
 //                    Intent filePicker = new Intent(getActivity(), FilePicker.class);
 //                    filePicker.putExtra(FilePicker.SCOPE_TYPE, FileScopeType.ALL);
