@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.ColorRes;
 
-import com.github.developerpaul123.filepickerlibrary.enums.FileScopeType;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.FileType;
 
 /**
@@ -14,7 +14,7 @@ public class FilePickerBuilder {
 
     private final Activity mActivity;
     boolean useMaterial;
-    private FileScopeType mType;
+    private Scope mType;
     private int requestCode;
     private int color;
     private FileType mimeType;
@@ -26,7 +26,7 @@ public class FilePickerBuilder {
      */
     public FilePickerBuilder(Activity activity) {
         color = android.R.color.holo_blue_bright;
-        mType = FileScopeType.ALL;
+        mType = Scope.ALL;
         mimeType = FileType.NONE;
         requestCode = FilePicker.REQUEST_FILE;
         mActivity = activity;
@@ -39,7 +39,7 @@ public class FilePickerBuilder {
      * @param type scope type. Can be DIRECTORIES or ALL.
      * @return the current builder instance.
      */
-    public FilePickerBuilder withScopeType(FileScopeType type) {
+    public FilePickerBuilder withScopeType(Scope type) {
         mType = type;
         return this;
     }

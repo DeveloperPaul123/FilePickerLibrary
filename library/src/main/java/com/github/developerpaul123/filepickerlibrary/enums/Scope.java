@@ -19,7 +19,6 @@ package com.github.developerpaul123.filepickerlibrary.enums;
 /**
  * An enum that has two possible values, {@code ALL} or {@code DIRECTORIES}
  */
-public enum FileScopeType {
-
+public enum Scope {
     ALL, DIRECTORIES
 }

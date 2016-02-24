@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.developerpaul123.filepickerlibrary.R;
-import com.github.developerpaul123.filepickerlibrary.enums.FileScopeType;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -55,9 +55,9 @@ public class FileListAdapter extends BaseAdapter {
     private final float iconPadding;
     private final Drawable folderDrawable;
 
-    private final FileScopeType mFileType;
+    private final Scope mFileType;
 
-    public FileListAdapter(Context context, File[] fileArray, FileScopeType type) {
+    public FileListAdapter(Context context, File[] fileArray, Scope type) {
         mContext = context;
         fileList = new ArrayList<File>(Arrays.asList(fileArray));
         inflater = LayoutInflater.from(mContext);
@@ -65,7 +65,7 @@ public class FileListAdapter extends BaseAdapter {
         selectedPos = -1;
         folderDrawable = mContext.getResources().getDrawable(R.drawable.fplib_ic_folder);
         iconPadding = mContext.getResources().getDimension(R.dimen.file_picker_lib_default_icon_padding);
-        if (mFileType == FileScopeType.DIRECTORIES) {
+        if (mFileType == Scope.DIRECTORIES) {
             for (int i = 0; i < fileList.size(); i++) {
                 String extension = fileExt(fileList.get(i).getPath());
                 if (extension != null) {
@@ -226,7 +226,7 @@ public class FileListAdapter extends BaseAdapter {
             }
         });
 
-        if (mFileType == FileScopeType.ALL) {
+        if (mFileType == Scope.ALL) {
             viewHolder.fileTitle.setText(fileList.get(i).getName());
             if (!fileList.get(i).isDirectory()) {
                 viewHolder.fileInfo.setText(String.format(mContext.getString(R.string.file_picker_adapter_file_size_only_string), fileList.get(i).length()));
@@ -270,7 +270,7 @@ public class FileListAdapter extends BaseAdapter {
                     }
                 }
             }
-        } else if (mFileType == FileScopeType.DIRECTORIES) {
+        } else if (mFileType == Scope.DIRECTORIES) {
             if (fileList.get(i).isDirectory()) {
                 viewHolder.fileImage.setBackgroundDrawable(folderDrawable);
                 viewHolder.fileTitle.setText(fileList.get(i).getName());

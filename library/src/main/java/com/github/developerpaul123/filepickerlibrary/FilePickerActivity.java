@@ -49,7 +49,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devpaul.materiallibrary.views.MaterialFloatingActionButton;
 import com.github.developerpaul123.filepickerlibrary.adapter.FileListAdapter;
-import com.github.developerpaul123.filepickerlibrary.enums.FileScopeType;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.FileType;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
 
@@ -81,7 +81,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     /**
      * Constant value for adding the SCOPE_TYPE enum as an extra to the {@code FilePickerActivity}
      * {@code Intent} The default is {@code FileType.ALL} see
-     * {@link FileScopeType} for other types.
+     * {@link Scope} for other types.
      */
     public static final String SCOPE_TYPE = "scopeType";
 
@@ -195,9 +195,9 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     private File currentFile;
     private boolean areButtonsShowing;
     /**
-     * {@link FileScopeType} enum
+     * {@link Scope} enum
      */
-    private FileScopeType scopeType;
+    private Scope scopeType;
     /**
      * {@link ThemeType} enum for the type of them for this
      * activity.
@@ -279,10 +279,10 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
         //get the scope type and request code. Defaults are all files and request of a directory
         //path.
-        scopeType = (FileScopeType) givenIntent.getSerializableExtra(SCOPE_TYPE);
+        scopeType = (Scope) givenIntent.getSerializableExtra(SCOPE_TYPE);
         if (scopeType == null) {
             //set default if it is null
-            scopeType = FileScopeType.ALL;
+            scopeType = Scope.ALL;
         }
         requestCode = givenIntent.getIntExtra(REQUEST_CODE, REQUEST_DIRECTORY);
 

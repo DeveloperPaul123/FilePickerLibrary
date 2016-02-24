@@ -32,7 +32,7 @@ import com.devpaul.materiallibrary.views.MaterialFlatButton;
 import com.github.developerpaul123.filepickerlibrary.FilePicker;
 import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
 import com.github.developerpaul123.filepickerlibrary.FilePickerBuilder;
-import com.github.developerpaul123.filepickerlibrary.enums.FileScopeType;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.FileType;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
 
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent filePickerActivity = new Intent(getActivity(), FilePickerActivity.class);
-                    filePickerActivity.putExtra(FilePickerActivity.SCOPE_TYPE, FileScopeType.ALL);
+                    filePickerActivity.putExtra(FilePickerActivity.SCOPE_TYPE, Scope.ALL);
                     filePickerActivity.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
                     filePickerActivity.putExtra(FilePickerActivity.INTENT_EXTRA_FAB_COLOR_ID, android.R.color.holo_green_dark);
                     startActivityForResult(filePickerActivity, FilePickerActivity.REQUEST_DIRECTORY);
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent filePicker = new Intent(getActivity(), FilePickerActivity.class);
-                    filePicker.putExtra(FilePickerActivity.SCOPE_TYPE, FileScopeType.ALL);
+                    filePicker.putExtra(FilePickerActivity.SCOPE_TYPE, Scope.ALL);
                     filePicker.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
                     filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_orange_dark);
                     startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent filePicker = new Intent(getActivity(), FilePickerActivity.class);
-                    filePicker.putExtra(FilePickerActivity.SCOPE_TYPE, FileScopeType.ALL);
+                    filePicker.putExtra(FilePickerActivity.SCOPE_TYPE, Scope.ALL);
                     filePicker.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
                     filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_green_dark);
                     filePicker.putExtra(FilePickerActivity.MIME_TYPE, FileType.PNG);
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                     new FilePickerBuilder(getActivity()).withColor(android.R.color.holo_blue_bright)
                             .withRequestCode(FilePicker.REQUEST_FILE)
-                            .withScopeType(FileScopeType.ALL)
+                            .withScopeType(Scope.ALL)
                             .withMimeType(FileType.JPEG)
                             .useMaterialActivity(true)
                             .launch();
