@@ -84,7 +84,6 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 ## Contributors
 - [Paul T](mailto:developer.paul.123@gmail.com) (developer)
 - [Alireza Eskandarpour Shoferi](https://twitter.com/enormoustheory) (contributor)
-- 
 
 ## License
     Copyright 2014 Paul T
