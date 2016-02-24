@@ -33,8 +33,9 @@ import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.github.developerpaul123.filepickerlibrary.adapter.FileRecyclerViewAdapter;
-import com.github.developerpaul123.filepickerlibrary.enums.FileScopeType;
-import com.github.developerpaul123.filepickerlibrary.enums.FileType;
+import com.github.developerpaul123.filepickerlibrary.enums.MimeType;
+import com.github.developerpaul123.filepickerlibrary.enums.Request;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
 
 import java.io.File;
@@ -45,27 +46,17 @@ import java.io.File;
 public class FilePicker extends AppCompatActivity implements NameFileDialogInterface {
 
     /**
-     * Request code for when you want the file path to a directory.
-     */
-    public static final int REQUEST_DIRECTORY = 101;
-
-    /**
-     * Request code for when you want the file path to a specific file.
-     */
-    public static final int REQUEST_FILE = 102;
-
-    /**
-     * Constant value for adding the REQUEST_CODE int as an extra to the {@code FilePickerActivity}
+     * Constant value for adding the REQUEST int as an extra to the {@code FilePickerActivity}
      * {@code Intent}
      */
-    public static final String REQUEST_CODE = "requestCode";
+    public static final String REQUEST = "request";
 
     /**
-     * Constant value for adding the SCOPE_TYPE enum as an extra to the {@code FilePickerActivity}
+     * Constant value for adding the SCOPE enum as an extra to the {@code FilePickerActivity}
      * {@code Intent} The default is {@code FileType.ALL} see
-     * {@link FileScopeType} for other types.
+     * {@link Scope} for other types.
      */
-    public static final String SCOPE_TYPE = "scopeType";
+    public static final String SCOPE = "scope";
 
     /**
      * Constant label value for sending a color id extra in the calling intent for this
@@ -200,9 +191,9 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         }
     };
     /**
-     * {@link FileScopeType} enum
+     * {@link Scope} enum
      */
-    private FileScopeType scopeType;
+    private Scope scopeType;
     /**
      * {@link ThemeType} enum for the type of them for this
      * activity.
@@ -215,7 +206,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
     /**
      * Request code for this activity
      */
-    private int requestCode;
+    private Request requestCode;
     /**
      * {@code Intent} used to send back the data to the calling activity
      */
@@ -276,8 +267,8 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         Object rawMimeTypeParameter = getIntent().getExtras().get(MIME_TYPE);
         if (rawMimeTypeParameter instanceof String) {
             mimeType = (String) rawMimeTypeParameter;
-        } else if (rawMimeTypeParameter instanceof FileType) {
-            mimeType = ((FileType) rawMimeTypeParameter).getMimeType();
+        } else if (rawMimeTypeParameter instanceof MimeType) {
+            mimeType = ((MimeType) rawMimeTypeParameter).getMimeType();
         } else {
             mimeType = null;
         }
@@ -289,12 +280,12 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
 
         //get the scope type and request code. Defaults are all files and request of a directory
         //path.
-        scopeType = (FileScopeType) givenIntent.getSerializableExtra(SCOPE_TYPE);
+        scopeType = (Scope) givenIntent.getSerializableExtra(SCOPE);
         if (scopeType == null) {
             //set default if it is null
-            scopeType = FileScopeType.ALL;
+            scopeType = Scope.ALL;
         }
-        requestCode = givenIntent.getIntExtra(REQUEST_CODE, REQUEST_DIRECTORY);
+        requestCode = (Request) givenIntent.getSerializableExtra(REQUEST);
 
         colorId = givenIntent.getIntExtra(INTENT_EXTRA_COLOR_ID, android.R.color.holo_blue_light);
         drawableId = givenIntent.getIntExtra(INTENT_EXTRA_DRAWABLE_ID, -1);
@@ -475,7 +466,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (requestCode == REQUEST_DIRECTORY) {
+                if (requestCode == Request.DIRECTORY) {
                     if (currentFile.isDirectory()) {
                         curDirectory = currentFile;
                         data = new Intent();

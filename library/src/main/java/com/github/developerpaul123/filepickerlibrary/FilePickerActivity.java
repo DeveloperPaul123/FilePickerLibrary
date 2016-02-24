@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -44,11 +45,13 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.devpaul.materiallibrary.views.MaterialFloatingActionButton;
 import com.github.developerpaul123.filepickerlibrary.adapter.FileListAdapter;
-import com.github.developerpaul123.filepickerlibrary.enums.FileScopeType;
-import com.github.developerpaul123.filepickerlibrary.enums.FileType;
+import com.github.developerpaul123.filepickerlibrary.enums.MimeType;
+import com.github.developerpaul123.filepickerlibrary.enums.Request;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
 
 import java.io.File;
@@ -61,27 +64,22 @@ import java.io.File;
 public class FilePickerActivity extends ListActivity implements NameFileDialogInterface {
 
     /**
-     * Request code for when you want the file path to a directory.
-     */
-    public static final int REQUEST_DIRECTORY = 101;
-
-    /**
      * Request code for when you want the file path to a specific file.
      */
     public static final int REQUEST_FILE = 102;
 
     /**
-     * Constant value for adding the REQUEST_CODE int as an extra to the {@code FilePickerActivity}
+     * Constant value for adding the REQUEST int as an extra to the {@code FilePickerActivity}
      * {@code Intent}
      */
-    public static final String REQUEST_CODE = "requestCode";
+    public static final String REQUEST = "request";
 
     /**
-     * Constant value for adding the SCOPE_TYPE enum as an extra to the {@code FilePickerActivity}
+     * Constant value for adding the SCOPE enum as an extra to the {@code FilePickerActivity}
      * {@code Intent} The default is {@code FileType.ALL} see
-     * {@link FileScopeType} for other types.
+     * {@link Scope} for other types.
      */
-    public static final String SCOPE_TYPE = "scopeType";
+    public static final String SCOPE = "scope";
 
     /**
      * Constant label value for sending a color id extra in the calling intent for this
@@ -193,9 +191,9 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     private File currentFile;
     private boolean areButtonsShowing;
     /**
-     * {@link FileScopeType} enum
+     * {@link Scope} enum
      */
-    private FileScopeType scopeType;
+    private Scope scopeType;
     /**
      * {@link ThemeType} enum for the type of them for this
      * activity.
@@ -208,7 +206,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
     /**
      * Request code for this activity
      */
-    private int requestCode;
+    private Request requestCode;
     /**
      * {@code Intent} used to send back the data to the calling activity
      */
@@ -264,8 +262,8 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         Object rawMimeTypeParameter = getIntent().getExtras().get(MIME_TYPE);
         if (rawMimeTypeParameter instanceof String) {
             mimeType = (String) rawMimeTypeParameter;
-        } else if (rawMimeTypeParameter instanceof FileType) {
-            mimeType = ((FileType) rawMimeTypeParameter).getMimeType();
+        } else if (rawMimeTypeParameter instanceof MimeType) {
+            mimeType = ((MimeType) rawMimeTypeParameter).getMimeType();
         } else {
             mimeType = null;
         }
@@ -277,12 +275,12 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
         //get the scope type and request code. Defaults are all files and request of a directory
         //path.
-        scopeType = (FileScopeType) givenIntent.getSerializableExtra(SCOPE_TYPE);
+        scopeType = (Scope) givenIntent.getSerializableExtra(SCOPE);
         if (scopeType == null) {
             //set default if it is null
-            scopeType = FileScopeType.ALL;
+            scopeType = Scope.ALL;
         }
-        requestCode = givenIntent.getIntExtra(REQUEST_CODE, REQUEST_DIRECTORY);
+        requestCode = (Request) givenIntent.getSerializableExtra(REQUEST);
 
         colorId = givenIntent.getIntExtra(INTENT_EXTRA_COLOR_ID, android.R.color.holo_blue_light);
         drawableId = givenIntent.getIntExtra(INTENT_EXTRA_DRAWABLE_ID, -1);
@@ -338,17 +336,18 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                             .content(R.string.file_picker_permission_rationale_dialog_content)
                             .positiveText(R.string.file_picker_ok)
                             .negativeText(R.string.file_picker_cancel)
-                            .callback(new MaterialDialog.ButtonCallback() {
+                            .onPositive(new MaterialDialog.SingleButtonCallback() {
                                 @Override
-                                public void onPositive(MaterialDialog dialog) {
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     ActivityCompat.requestPermissions(FilePickerActivity.this,
                                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
                                                     Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                             REQUEST_FOR_READ_EXTERNAL_STORAGE);
                                 }
-
+                            })
+                            .onNegative(new MaterialDialog.SingleButtonCallback() {
                                 @Override
-                                public void onNegative(MaterialDialog dialog) {
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                     setResult(RESULT_CANCELED);
                                     finish();
                                 }
@@ -393,8 +392,8 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
         switch (requestCode) {
             case REQUEST_FOR_READ_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED) &&
+                        (grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                     //permission granted.
                     init();
                 } else {
@@ -449,7 +448,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         selectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (requestCode == REQUEST_DIRECTORY) {
+                if (requestCode == Request.DIRECTORY) {
                     if (currentFile.isDirectory()) {
                         curDirectory = currentFile;
                         data = new Intent();
@@ -464,7 +463,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         curDirectory = currentFile;
                         new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                     } else {
-                        if (mimeType != null && !mimeType.equalsIgnoreCase(FileType.NONE.getMimeType())) {
+                        if (mimeType != null && !mimeType.equalsIgnoreCase(MimeType.NONE.getMimeType())) {
                             MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                             String requiredExtension = "." + mimeTypeMap.getExtensionFromMimeType(mimeType);
                             if (requiredExtension.equalsIgnoreCase(fileExt(currentFile.toString()))) {
@@ -473,7 +472,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                                 setResult(RESULT_OK, data);
                                 finish();
                             } else {
-                                Snackbar.make(getWindow().getDecorView(), String.format(getString(R.string.file_picker_snackbar_select_file_ext_message),requiredExtension), Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(getWindow().getDecorView(), String.format(getString(R.string.file_picker_snackbar_select_file_ext_message), requiredExtension), Snackbar.LENGTH_SHORT).show();
                             }
                         } else {
                             data = new Intent();

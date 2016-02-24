@@ -16,13 +16,12 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.github.developerpaul123.filepickerlibrary.R;
-import com.github.developerpaul123.filepickerlibrary.enums.FileScopeType;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -40,7 +39,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter {
     private final Drawable folderDrawable;
     private int selectedPosition;
     private final float iconPadding;
-    private final FileScopeType mFileType;
+    private final Scope mFileType;
     private final File[] mFiles;
     private final FileRecyclerViewAdapter.Callback mCallback;
     private final View.OnClickListener viewClickListener = new View.OnClickListener() {
@@ -55,7 +54,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter {
     private final List<File> fileList;
     private final Context context;
 
-    public FileRecyclerViewAdapter(Context context, File[] files, FileScopeType scopeType, FileRecyclerViewAdapter.Callback callback) {
+    public FileRecyclerViewAdapter(Context context, File[] files, Scope scopeType, FileRecyclerViewAdapter.Callback callback) {
         this.context = context;
         mFiles = files;
         iconPadding = context.getResources().getDimension(R.dimen.file_picker_lib_default_icon_padding);
@@ -63,7 +62,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter {
         selectedPosition = -1;
         folderDrawable = context.getResources().getDrawable(R.drawable.fplib_ic_folder);
         fileList = new ArrayList<>(Arrays.asList(files));
-        if (mFileType == FileScopeType.DIRECTORIES) {
+        if (mFileType == Scope.DIRECTORIES) {
             for (int i = 0; i < fileList.size(); i++) {
                 String extension = fileExt(fileList.get(i).getPath());
                 if (extension != null) {
@@ -223,7 +222,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            if (mFileType == FileScopeType.ALL) {
+            if (mFileType == Scope.ALL) {
                 viewHolder.fileTitle.setText(fileList.get(i).getName());
                 if (!fileList.get(i).isDirectory()) {
                     viewHolder.fileInfo.setText(String.format(context.getString(R.string.file_picker_adapter_file_size_only_string),
@@ -268,7 +267,7 @@ public class FileRecyclerViewAdapter extends RecyclerView.Adapter {
                         }
                     }
                 }
-            } else if (mFileType == FileScopeType.DIRECTORIES) {
+            } else if (mFileType == Scope.DIRECTORIES) {
                 if (fileList.get(i).isDirectory()) {
                     viewHolder.fileImage.setBackgroundDrawable(folderDrawable);
                     viewHolder.fileTitle.setText(fileList.get(i).getName());

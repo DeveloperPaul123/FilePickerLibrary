@@ -17,21 +17,8 @@
 package com.github.developerpaul123.filepickerlibrary.enums;
 
 /**
- * Created by Paul Tsouchlos
+ * An enum that has two possible values, {@code ALL} or {@code DIRECTORIES}
  */
-public enum FileType {
-    NONE(""), JPEG("image/jpeg"), JPG("image/jpeg"), PNG("image/png"), XML("application/xml"),
-    XLS("application/vnd.ms-excel"), XLSX("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
-    DOC("application/msword"), DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
-    HTML("text/html"), TXT("text/plain"), PDF("application/pdf");
-
-    private final String mimeType;
-
-    FileType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    public String getMimeType() {
-        return mimeType;
-    }
+public enum Scope {
+    ALL, DIRECTORIES
 }

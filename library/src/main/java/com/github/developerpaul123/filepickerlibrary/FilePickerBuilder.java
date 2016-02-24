@@ -1,36 +1,39 @@
 package com.github.developerpaul123.filepickerlibrary;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.ColorRes;
 
-import com.github.developerpaul123.filepickerlibrary.enums.FileScopeType;
-import com.github.developerpaul123.filepickerlibrary.enums.FileType;
+import com.github.developerpaul123.filepickerlibrary.enums.MimeType;
+import com.github.developerpaul123.filepickerlibrary.enums.Request;
+import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 
 /**
  * Created by Paul on 11/23/2015.
  */
 public class FilePickerBuilder {
 
-    boolean useMaterial;
-    private final Activity mActivity;
-    private FileScopeType mType;
-    private int requestCode;
-    private int color;
-    private FileType mimeType;
+    private final Context mContext;
+    private boolean useMaterial;
+    private Scope mScope = Scope.ALL;
+    private Request requestCode = Request.FILE;
+    private int color = android.R.color.holo_blue_bright;
+    private MimeType mimeType = MimeType.NONE;
 
     /**
      * Builder class to build a filepicker activity.
      *
-     * @param activity the calling activity.
+     * @param context the calling activity.
      */
-    public FilePickerBuilder(Activity activity) {
-        color = android.R.color.holo_blue_bright;
-        mType = FileScopeType.ALL;
-        mimeType = FileType.NONE;
-        requestCode = FilePicker.REQUEST_FILE;
-        mActivity = activity;
-        useMaterial = false;
+    public FilePickerBuilder(Context context) {
+        mContext = context;
+    }
+
+    @Deprecated
+    public FilePickerBuilder withScopeType(Scope type) {
+        mScope = type;
+        return this;
     }
 
     /**
@@ -39,8 +42,8 @@ public class FilePickerBuilder {
      * @param type scope type. Can be DIRECTORIES or ALL.
      * @return the current builder instance.
      */
-    public FilePickerBuilder withScopeType(FileScopeType type) {
-        mType = type;
+    public FilePickerBuilder withScope(Scope type) {
+        mScope = type;
         return this;
     }
 
@@ -48,11 +51,11 @@ public class FilePickerBuilder {
      * Set the request code of this. You can request a path to a file or
      * a directory.
      *
-     * @param requestCode the request code can be FilePicker.DIRECTORY or FilePicker.FILE.
-     * @return current instance of the builder.
+     * @param request
+     * @return
      */
-    public FilePickerBuilder withRequestCode(int requestCode) {
-        this.requestCode = requestCode;
+    public FilePickerBuilder withRequest(Request request) {
+        requestCode = request;
         return this;
     }
 
@@ -74,7 +77,7 @@ public class FilePickerBuilder {
      * @param type the mime type.
      * @return current instance of the builder.
      */
-    public FilePickerBuilder withMimeType(FileType type) {
+    public FilePickerBuilder withMimeType(MimeType type) {
         mimeType = type;
         return this;
     }
@@ -90,13 +93,10 @@ public class FilePickerBuilder {
         return this;
     }
 
-    /**
-     * Builds and starts the intent with startActivityForResult() uses the
-     * request code you said as the request code for the activity result.
-     */
+    @Deprecated
     public void launch() {
         Intent intent = build();
-        mActivity.startActivityForResult(intent, requestCode);
+        ((Activity) mContext).startActivityForResult(intent, requestCode.ordinal());
     }
 
     /**
@@ -105,11 +105,21 @@ public class FilePickerBuilder {
      * @return a filepicker intent.
      */
     public Intent build() {
-        Intent filePicker = new Intent(mActivity, useMaterial ? FilePicker.class : FilePickerActivity.class);
-        filePicker.putExtra(FilePicker.SCOPE_TYPE, mType);
-        filePicker.putExtra(FilePicker.REQUEST_CODE, requestCode);
+        Intent filePicker = new Intent(mContext, useMaterial ? FilePicker.class : FilePickerActivity.class);
+        filePicker.putExtra(FilePicker.SCOPE, mScope);
+        filePicker.putExtra(FilePicker.REQUEST, requestCode);
         filePicker.putExtra(FilePicker.INTENT_EXTRA_COLOR_ID, color);
         filePicker.putExtra(FilePicker.MIME_TYPE, mimeType);
         return filePicker;
+    }
+
+    /**
+     * Builds and starts the intent with startActivityForResult() uses the request code you said as the request code for the activity result.
+     *
+     * @param requestCode
+     */
+    public void launch(int requestCode) {
+        Intent intent = build();
+        ((Activity) mContext).startActivityForResult(intent, requestCode);
     }
 }
