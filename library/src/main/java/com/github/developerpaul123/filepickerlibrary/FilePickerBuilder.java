@@ -14,7 +14,7 @@ public class FilePickerBuilder {
 
     private final Activity mActivity;
     boolean useMaterial;
-    private Scope mType;
+    private Scope mScope;
     private int requestCode;
     private int color;
     private FileType mimeType;
@@ -26,7 +26,7 @@ public class FilePickerBuilder {
      */
     public FilePickerBuilder(Activity activity) {
         color = android.R.color.holo_blue_bright;
-        mType = Scope.ALL;
+        mScope = Scope.ALL;
         mimeType = FileType.NONE;
         requestCode = FilePicker.REQUEST_FILE;
         mActivity = activity;
@@ -40,7 +40,7 @@ public class FilePickerBuilder {
      * @return the current builder instance.
      */
     public FilePickerBuilder withScopeType(Scope type) {
-        mType = type;
+        mScope = type;
         return this;
     }
 
@@ -103,7 +103,7 @@ public class FilePickerBuilder {
      */
     public Intent build() {
         Intent filePicker = new Intent(mActivity, useMaterial ? FilePicker.class : FilePickerActivity.class);
-        filePicker.putExtra(FilePicker.SCOPE_TYPE, mType);
+        filePicker.putExtra(FilePicker.SCOPE_TYPE, mScope);
         filePicker.putExtra(FilePicker.REQUEST_CODE, requestCode);
         filePicker.putExtra(FilePicker.INTENT_EXTRA_COLOR_ID, color);
         filePicker.putExtra(FilePicker.MIME_TYPE, mimeType);
