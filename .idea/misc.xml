@@ -2,6 +2,16 @@
 <project version="4">
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
+    <list size="2">
+      <item index="0" class="java.lang.String" itemvalue="butterknife.Bind" />
+      <item index="1" class="java.lang.String" itemvalue="butterknife.OnClick" />
+    </list>
+  </component>
+  <component name="FindBugsConfigurable">
+    <option name="make" value="true" />
+    <option name="effort" value="default" />
+    <option name="priority" value="Medium" />
+    <option name="excludeFilter" value="" />
   </component>
   <component name="NullableNotNullManager">
     <option name="myDefaultNullable" value="android.support.annotation.Nullable" />
@@ -45,8 +55,5 @@
   </component>
   <component name="SuppressionsComponent">
     <option name="suppComments" value="[]" />
-  </component>
-  <component name="SvnConfiguration">
-    <configuration />
   </component>
 </project>
