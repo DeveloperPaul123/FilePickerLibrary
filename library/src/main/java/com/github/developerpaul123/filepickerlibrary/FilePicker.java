@@ -20,6 +20,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -481,7 +482,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
                         curDirectory = currentFile;
                         new UpdateFilesTask(FilePicker.this).execute(curDirectory);
                     } else {
-                        if (mimeType != null) {
+                        if (!TextUtils.isEmpty(mimeType)) {
                             MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                             String requiredExtension = "." + mimeTypeMap.getExtensionFromMimeType(mimeType);
                             if (requiredExtension.equalsIgnoreCase(fileExt(currentFile.toString()))) {
