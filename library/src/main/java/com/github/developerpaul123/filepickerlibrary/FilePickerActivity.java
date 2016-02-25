@@ -33,6 +33,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -463,7 +464,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                         curDirectory = currentFile;
                         new UpdateFilesTask(FilePickerActivity.this).execute(curDirectory);
                     } else {
-                        if (mimeType != null && !mimeType.equalsIgnoreCase(MimeType.NONE.getMimeType())) {
+                        if (!TextUtils.isEmpty(mimeType)) {
                             MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
                             String requiredExtension = "." + mimeTypeMap.getExtensionFromMimeType(mimeType);
                             if (requiredExtension.equalsIgnoreCase(fileExt(currentFile.toString()))) {

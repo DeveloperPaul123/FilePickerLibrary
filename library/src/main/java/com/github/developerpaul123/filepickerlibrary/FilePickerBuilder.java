@@ -19,7 +19,7 @@ public class FilePickerBuilder {
     private Scope mScope = Scope.ALL;
     private Request requestCode = Request.FILE;
     private int color = android.R.color.holo_blue_bright;
-    private MimeType mimeType = MimeType.NONE;
+    private MimeType mimeType;
 
     /**
      * Builder class to build a filepicker activity.

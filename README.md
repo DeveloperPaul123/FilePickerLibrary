@@ -1,116 +1,101 @@
-FilePickerLibrary
-=================
+# FilePickerLibrary
 
-[![Android Arsenal](http://img.shields.io/badge/Android%20Arsenal-FilePickerLibrary-blue.svg?style=flat)](http://android-arsenal.com/details/1/785)
-
-[![](https://jitpack.io/v/DeveloperPaul123/FilePickerLibrary.svg)](https://jitpack.io/#DeveloperPaul123/FilePickerLibrary)
+[![Release](https://jitpack.io/v/com.github.alirezaaa/FilePickerLibrary.svg)](https://jitpack.io/#alirezaaa/FilePickerLibrary)
 
 Simple library that allows for picking of files and directories. This is a clean and simple way to allow your user to easily select a file. This library is inspired by Android L and the new Material Design guidelines adding to its sleekness and beauty.
 
-
 ![image] (images/main_framed.png)
 
-<h2>Requirements</h2>
-Min SDK Level is 16
+## A Quick Overview What's In
+* compatible down to API Level 16
 
-<h2>Dependency</h2>
-
-Clone this repository or download the zip. Then extract to your computer. Simply import the library to your project but only include the FPlib module (that's where the library is). If you're using Android Studio then import a module and only include the FPlib module. See the license for usage terms.
-
-Alternatively you can use gradle.
-
-Add the following code to your gradle build script.
-````java
-	repositories {
-		...
-		maven {url "https://jitpack.io"}
-	}
-	dependencies {
-	  	compile 'com.github.DeveloperPaul123:FilePickerLibrary:2.1.1'
-	}
-  ````
-
-<h2>Usage</h2>
-Simply do the following.
-```java
-Intent filePickerIntent = new Intent(this, FilePickerActivity.class);
-filePickerIntent.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
-startActivityForResult(filePickerIntent, FilePickerActivity.REQUEST_DIRECTORY); 
+## Include to Project
+### Provide the Gradle Dependency
+#### Step 1
+Add the JitPack in your root `build.gradle` at the end of repositories:
+```gradle
+allprojects {
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}
 ```
-Make sure to add the int extra for your request code. You can also request for a file path instead of a directory. See the javadocs for more info. To get the file path do the following.
-
-```java
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    if(requestCode == FilePickerActivity.REQUEST_DIRECTORY 
-    && resultCode == RESULT_OK) {
-    
-        String filePath = data.
-                getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH);
-                if(filePath != null) {
-                //do something with filePath...
-                }
-  }
-    super.onActivityResult(requestCode, resultCode, data);
-  }
+#### Step 2
+Add the dependency
+```gradle
+dependencies {
+    compile 'com.github.alirezaaa:FilePickerLibrary:3.5.1'
+}
 ```
+### Clone or Download `.zip` file
+Clone this repository or download the compressed file, then extract to your computer. Simply import the `library` module to your project.
 
-<h2>Customization</h2>
-You can change the header background in the activity by adding resorce ids to your calling intent as int extras. Below is an example.
-
+## Usages
+Use one of the following samples or simply compile and test the sample `app` provided:
+### Material Theme Used (with Modern Builder)
 ```java
-Intent filePickerIntent = new Intent(this, FilePickerActivity.class);
-filePickerIntent.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_DIRECTORY);
-filePickerIntent.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, R.color.myColor);
-startActivityForResult(filePickerIntent, FilePickerActivity.REQUEST_DIRECTORY); 
+new FilePickerBuilder(this)
+    .withColor(android.R.color.holo_blue_bright)
+    .withRequest(Request.FILE)
+    .withScope(Scope.ALL)
+    .withMimeType(MimeType.JPEG)
+    .useMaterialActivity(true)
+    .launch(REQUEST_FILE);
 ```
-You can also change the theme for the activity to make it look like a dialog.
+### `image/png` Mime Type
 ```java
-Intent filePickerDialogIntent = new Intent(getActivity(), FilePickerActivity.class);
-filePickerDialogIntent.putExtra(FilePickerActivity.THEME_TYPE, ThemeType.DIALOG);
-filePickerDialogIntent.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
-startActivityForResult(filePickerDialogIntent, FilePickerActivity.REQUEST_FILE);
-```
-In addition you can set a mime type that you want the user to select. The activity will not return a result until that type of file is selected. For example: 
-
-```java
-Intent filePicker = new Intent(getActivity(), FilePickerActivity.class);
-filePicker.putExtra(FilePickerActivity.SCOPE_TYPE, FileScopeType.ALL);
-filePicker.putExtra(FilePickerActivity.REQUEST_CODE, FilePickerActivity.REQUEST_FILE);
+Intent filePicker = new Intent(this, FilePickerActivity.class);
+filePicker.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
+filePicker.putExtra(FilePickerActivity.REQUEST, Request.FILE);
 filePicker.putExtra(FilePickerActivity.INTENT_EXTRA_COLOR_ID, android.R.color.holo_green_dark);
-filePicker.putExtra(FilePickerActivity.MIME_TYPE, FileType.PNG);
-startActivityForResult(filePicker, FilePickerActivity.REQUEST_FILE);
+filePicker.putExtra(FilePickerActivity.MIME_TYPE, MimeType.PNG);
+startActivityForResult(filePicker, REQUEST_FILE);
 ```
-
-Finally, you can now use a builder class to simplify intent creation:
+### Show as a Dialog
+```java
+Intent filePickerDialogIntent = new Intent(this, FilePickerActivity.class);
+filePickerDialogIntent.putExtra(FilePickerActivity.THEME_TYPE, ThemeType.DIALOG);
+filePickerDialogIntent.putExtra(FilePickerActivity.REQUEST, Request.FILE);
+startActivityForResult(filePickerDialogIntent, REQUEST_FILE);
+```
+### Select a Directory
+```java
+Intent filePickerActivity = new Intent(this, FilePickerActivity.class);
+filePickerActivity.putExtra(FilePickerActivity.SCOPE, Scope.ALL);
+filePickerActivity.putExtra(FilePickerActivity.REQUEST, Request.DIRECTORY);
+filePickerActivity.putExtra(FilePickerActivity.INTENT_EXTRA_FAB_COLOR_ID, android.R.color.holo_green_dark);
+startActivityForResult(filePickerActivity, REQUEST_DIRECTORY);
+```
+To have the result, you must override `onActivityResult(int, int, Intent)` method as I did below:
 
 ```java
-new FilePickerBuilder(getActivity()).withColor(android.R.color.holo_blue_bright)
-                            .withRequestCode(FilePicker.REQUEST_FILE)
-                            .withScopeType(FileScopeType.ALL)
-                            .withMimeType(FileType.PNG)
-                            .useMaterialActivity(true)
-                            .launch();
+@Override
+public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if ((requestCode == REQUEST_DIRECTORY) && (resultCode == RESULT_OK)) {
+        Toast.makeText(this, "Directory Selected: " + data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH), Toast.LENGTH_LONG).show();
+    } else if ((requestCode == REQUEST_FILE) && (resultCode == RESULT_OK)) {
+        Toast.makeText(this, "File Selected: " + data.getStringExtra(FilePickerActivity.FILE_EXTRA_DATA_PATH), Toast.LENGTH_LONG).show();
+    }
+}
 ```
-You can also call ` build() ` instead of ` launch() ` and you will get back an activity. Note that `launch()` starts the activity with `startActivityForResult() ` and uses the request code you passed into the builder as the request code for the activity result extra. So when listening for activity results be sure to use the same request code.
+## Contributors
+- [Paul T](mailto:developer.paul.123@gmail.com) (developer)
+- [Alireza Eskandarpour Shoferi](https://twitter.com/enormoustheory) (contributor)
 
-<h2>Demo App</h2>
-* **Check out the sample on google play.**
-
-       [![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.devpaul.filepicker)
-       
-<h2>Developed By</h2>
-**Paul T**
-
-<h2>License</h2>
-
-Copyright 2014 Paul T
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
-
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+## License
+    Copyright 2014 Paul T
+    
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
