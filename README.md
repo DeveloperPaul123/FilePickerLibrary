@@ -25,7 +25,7 @@ allprojects {
 Add the dependency
 ```gradle
 dependencies {
-    compile 'com.github.alirezaaa:FilePickerLibrary:3.5'
+    compile 'com.github.alirezaaa:FilePickerLibrary:3.5.1'
 }
 ```
 ### Clone or Download `.zip` file
