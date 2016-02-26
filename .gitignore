@@ -37,6 +37,11 @@ $RECYCLE.BIN/
 
 ### OSX ###
 .DS_Store
+<<<<<<< HEAD
+/build
+.idea/
+*.jks
+=======
 .AppleDouble
 .LSOverride
 
@@ -234,3 +239,4 @@ captures/
 
 ### Android Patch ###
 gen-external-apklibs
+>>>>>>> 68c852d17ee457390c69f9cc460e780d04a3c0df

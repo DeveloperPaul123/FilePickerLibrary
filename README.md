@@ -1,13 +1,15 @@
 # FilePickerLibrary
 
-[![Release](https://jitpack.io/v/com.github.alirezaaa/FilePickerLibrary.svg)](https://jitpack.io/#alirezaaa/FilePickerLibrary)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FilePickerLibrary-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/785)
+
+[![Release](https://jitpack.io/v/DeveloperPaul123/FilePickerLibrary.svg)](https://jitpack.io/#DeveloperPaul123/FilePickerLibrary)
 
 Simple library that allows for picking of files and directories. This is a clean and simple way to allow your user to easily select a file. This library is inspired by Android L and the new Material Design guidelines adding to its sleekness and beauty.
 
 ![image] (images/main_framed.png)
 
 ## A Quick Overview What's In
-* compatible down to API Level 16
+* Compatible down to API Level 16
 
 ## Include to Project
 ### Provide the Gradle Dependency
@@ -86,7 +88,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
 - [Alireza Eskandarpour Shoferi](https://twitter.com/enormoustheory) (contributor)
 
 ## License
-    Copyright 2014 Paul T
+    Copyright 2016 Paul T
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
