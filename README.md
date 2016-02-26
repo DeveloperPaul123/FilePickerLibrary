@@ -1,6 +1,6 @@
 # FilePickerLibrary
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FilePickerLibrary-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/785)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-FilePickerLibrary-blue.svg?style=flat-square)](http://android-arsenal.com/details/1/785)
 
 [![Release](https://jitpack.io/v/DeveloperPaul123/FilePickerLibrary.svg)](https://jitpack.io/#DeveloperPaul123/FilePickerLibrary)
 
