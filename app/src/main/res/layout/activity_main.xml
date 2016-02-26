@@ -1,7 +1,56 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context="com.github.developerpaul123.filepickerlibrary.app.MainActivity$PlaceholderFragment">
+
+    <com.devpaul.materiallibrary.views.MaterialFlatButton
+        android:id="@+id/file_picker_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:mat_flat_button_color="#303F9F"
+        app:mat_flat_button_text="@string/file_picker_activity"/>
+
+    <com.devpaul.materiallibrary.views.MaterialFlatButton
+        android:id="@+id/file_picker_return_file_path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/file_picker_activity"
+        android:layout_marginTop="10dip"
+        app:mat_flat_button_color="#303F9F"
+        app:mat_flat_button_text="@string/return_file_path"/>
+
+    <com.devpaul.materiallibrary.views.MaterialFlatButton
+        android:id="@+id/file_picker_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/file_picker_return_file_path"
+        android:layout_marginTop="10dip"
+        app:mat_flat_button_color="#303F9F"
+        app:mat_flat_button_text="@string/file_picker_dialog"/>
+
+    <com.devpaul.materiallibrary.views.MaterialFlatButton
+        android:id="@+id/file_picker_mime_png"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/file_picker_dialog"
+        android:layout_marginTop="10dip"
+        app:mat_flat_button_color="#303F9F"
+        app:mat_flat_button_text="PNG Mime"/>
+
+    <com.devpaul.materiallibrary.views.MaterialFlatButton
+        android:id="@+id/new_file_picker_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/file_picker_mime_png"
+        android:layout_marginTop="10dip"
+        app:mat_flat_button_color="#303F9F"
+        app:mat_flat_button_text="Material"/>
+
+</RelativeLayout>

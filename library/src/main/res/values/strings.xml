@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">FilePickerLibrary</string>
+    <string name="file_picker_permission_rationale_dialog_title">Read/Write Storage Permission</string>
+    <string name="file_picker_permission_rationale_dialog_content">The read/write storage permission is needed to access and read the files on your phone to display them to you</string>
+    <string name="file_picker_ok">OK</string>
+    <string name="file_picker_cancel">Cancel</string>
+    <string name="file_picker_directory_error">Initial file must be a directory.</string>
+    <string name="file_picker_snackbar_select_directory_message">Please select a directory.</string>
+    <string name="file_picker_snackbar_select_file_ext_message">Please select a %s file</string>
+    <string name="file_picker_snackbar_no_file_type_handler">No handler for this type of file.</string>
+    <string name="file_picker_snackbar_no_read_type">Couldn\'t get file type.</string>
+    <string name="file_picker_progress_dialog_loading">Loading…</string>
+    <string name="file_picker_default_directory_title">Parent Directory</string>
+    <string name="file_picker_adapter_size_string">Size: %d bytes</string>
+    <string name="file_picker_adapter_last_modified_string">Last Modified: %s</string>
+    <string name="file_picker_adapter_file_path_string">Path: %s</string>
+    <string name="file_picker_adapter_file_size_only_string">%d bytes</string>
+    <string name="file_picker_file_info_dialog_file_path">File: %s</string>
+    <string name="file_picker_recycler_adapter_view_holder_type_error">No type that matches that type.</string>
+    <item name="POSITION_KEY" type="id"/>
+</resources>

@@ -3,13 +3,13 @@ apply plugin: 'com.android.application'
 android {
 
     compileSdkVersion 23
-    buildToolsVersion '21.1.2'
+    buildToolsVersion '23.0.2'
     defaultConfig {
-        applicationId 'com.devpaul.filepicker'
+        applicationId 'com.github.developerpaul123.filepickerlibrary'
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName '1.0'
+        versionCode 3
+        versionName '3.5'
     }
     buildTypes {
         release {
@@ -21,14 +21,14 @@ android {
     }
 }
 
-repositories {
-    mavenCentral()
-    maven {url "https://jitpack.io"}
-}
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+<<<<<<< HEAD
 //    compile 'com.github.DeveloperPaul123:FilePickerLibrary:2.1'
     compile project(":FPlib")
+=======
+    compile project(':library')
+>>>>>>> 68c852d17ee457390c69f9cc460e780d04a3c0df
     compile 'com.github.DeveloperPaul123:MaterialLibrary:1.0.5'
+    compile 'com.jakewharton:butterknife:7.0.1'
 }

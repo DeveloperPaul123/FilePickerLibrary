@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2014 Paul Tsouchlos
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Directory Empty"
+        android:textColor="@android:color/secondary_text_light"
+        android:textSize="16sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/header_container"
+            android:layout_width="match_parent"
+            android:layout_height="100dip"
+            android:background="@android:color/holo_blue_dark">
+
+            <TextView
+                android:id="@+id/file_directory_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="40dip"
+                android:layout_marginLeft="20dip"
+                android:text="TEST"
+                android:textAllCaps="true"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                />
+
+        </RelativeLayout>
+
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/header_container"
+            android:animateLayoutChanges="true"
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:dividerHeight="0dip">
+        </ListView>
+
+    </RelativeLayout>
+
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/file_navigation_up_button"-->
+    <!--android:layout_width="56dp"-->
+    <!--android:layout_height="56dp"-->
+    <!--android:src="@drawable/fplib_ic_action_navigation_back"-->
+    <!--android:layout_gravity="top|right"-->
+    <!--android:background="@drawable/circle"-->
+    <!--android:layout_marginTop="65dip"-->
+    <!--android:layout_marginRight="70dip"/>-->
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/new_file_button"-->
+    <!--android:layout_width="56dp"-->
+    <!--android:layout_height="56dp"-->
+    <!--android:src="@drawable/fplib_ic_action_content_new"-->
+    <!--android:layout_gravity="top|right"-->
+    <!--android:layout_marginTop="65dip"-->
+    <!--android:background="@drawable/circle"-->
+    <!--android:layout_marginRight="10dip"/>-->
+
+    <com.devpaul.materiallibrary.views.MaterialFloatingActionButton
+        android:id="@+id/file_picker_add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="54dp"
+        fab:mat_fab_colorNormal="@android:color/holo_blue_bright"
+        fab:mat_fab_size="mini"/>
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/open_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:text="Open"
+            android:textColor="@android:color/primary_text_light_nodisable"/>
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/darker_gray"/>
+
+        <Button
+            android:id="@+id/select_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/card_background"
+            android:text="Select"
+            android:textColor="@android:color/primary_text_light_nodisable"/>
+    </LinearLayout>
+
+</FrameLayout>
