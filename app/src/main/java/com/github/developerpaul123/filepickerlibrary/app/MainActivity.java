@@ -19,10 +19,10 @@ package com.github.developerpaul123.filepickerlibrary.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.devpaul.filepicker.R;
-import com.devpaul.materiallibrary.views.MaterialFlatButton;
 import com.github.developerpaul123.filepickerlibrary.FilePickerActivity;
 import com.github.developerpaul123.filepickerlibrary.FilePickerBuilder;
 import com.github.developerpaul123.filepickerlibrary.enums.MimeType;
@@ -30,7 +30,7 @@ import com.github.developerpaul123.filepickerlibrary.enums.Request;
 import com.github.developerpaul123.filepickerlibrary.enums.Scope;
 import com.github.developerpaul123.filepickerlibrary.enums.ThemeType;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -39,16 +39,16 @@ public class MainActivity extends AppCompatActivity {
 
     static int REQUEST_FILE = 10;
     static int REQUEST_DIRECTORY = 11;
-    @Bind(R.id.file_picker_activity)
-    MaterialFlatButton activitySample;
-    @Bind(R.id.file_picker_return_file_path)
-    MaterialFlatButton returnFilePathSample;
-    @Bind(R.id.file_picker_dialog)
-    MaterialFlatButton dialogSample;
-    @Bind(R.id.file_picker_mime_png)
-    MaterialFlatButton mimePngSample;
-    @Bind(R.id.new_file_picker_activity)
-    MaterialFlatButton materialSample;
+    @BindView(R.id.file_picker_activity)
+    Button activitySample;
+    @BindView(R.id.file_picker_return_file_path)
+    Button returnFilePathSample;
+    @BindView(R.id.file_picker_dialog)
+    Button dialogSample;
+    @BindView(R.id.file_picker_mime_png)
+    Button mimePngSample;
+    @BindView(R.id.new_file_picker_activity)
+    Button materialSample;
 
     @OnClick(R.id.file_picker_mime_png)
     void mimePngSample() {
