@@ -17,5 +17,6 @@
     <string name="file_picker_adapter_file_size_only_string">%d bytes</string>
     <string name="file_picker_file_info_dialog_file_path">File: %s</string>
     <string name="file_picker_recycler_adapter_view_holder_type_error">No type that matches that type.</string>
-    <item name="POSITION_KEY" type="id"/>
+    <item name="POSITION_KEY" type="id" />
+    <string name="title_activity_main">Test</string>
 </resources>

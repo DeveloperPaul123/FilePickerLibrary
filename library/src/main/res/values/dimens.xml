@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2014 Paul Tsouchlos
   ~
   ~    Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,4 +17,5 @@
 <resources>
     <dimen name="file_picker_lib_default_icon_size">24dp</dimen>
     <dimen name="file_picker_lib_default_icon_padding">6dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

@@ -16,39 +16,45 @@
   ~    limitations under the License.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:padding="16dp">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relativeLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/file_item_image_view"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginLeft="4dp"
-        android:background="@drawable/fplib_circle"/>
+        android:background="@drawable/fplib_circle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/file_item_file_name"
         style="@style/FileName.Title"
         android:layout_marginLeft="8dip"
         android:layout_marginTop="8dip"
-        android:layout_toRightOf="@+id/file_item_image_view"/>
+        app:layout_constraintLeft_toRightOf="@+id/file_item_image_view"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/file_item_file_info"
         style="@style/FileName.Secondary"
-        android:layout_below="@id/file_item_file_name"
         android:layout_marginLeft="8dip"
         android:layout_marginTop="2dip"
-        android:layout_toRightOf="@id/file_item_image_view"/>
+        app:layout_constraintLeft_toRightOf="@id/file_item_image_view"
+        app:layout_constraintTop_toBottomOf="@id/file_item_file_name" />
 
     <ImageView
         android:id="@+id/file_item_file_info_button"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
