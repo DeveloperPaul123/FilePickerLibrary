@@ -20,6 +20,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +45,7 @@ import java.io.File;
 /**
  * Created by Paul on 10/8/2015.
  */
-public class FilePicker extends AppCompatActivity implements NameFileDialogInterface {
+public class FilePicker extends AppCompatActivity {
 
     /**
      * Constant value for adding the REQUEST int as an extra to the {@code FilePickerActivity}
@@ -168,17 +169,17 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
     /**
      * {@code FileListAdapter} object
      */
-    private FileRecyclerViewAdapter adapter;
+    FileRecyclerViewAdapter adapter;
     /**
      * The currently selected file
      */
-    private File currentFile;
+    File currentFile;
     private boolean areButtonsShowing;
     private final FileRecyclerViewAdapter.Callback callback = new FileRecyclerViewAdapter.Callback() {
         @Override
         public void onItemClicked(View item, int position) {
 
-            if (position > 0 && position <= files.length - 1) {
+            if ((position > 0) && (position <= (files.length - 1))) {
                 currentFile = files[position];
             }
 
@@ -245,23 +246,25 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         setContentView(R.layout.material_file_picker_activity_layout);
         recyclerView = (RecyclerView) findViewById(R.id.file_picker_recycler_view);
         toolbar = (Toolbar) findViewById(R.id.file_picker_base_toolbar);
+        setSupportActionBar(toolbar);
+
         fab = (FloatingActionButton) findViewById(R.id.file_picker_floating_action_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NameFileDialog nfd = NameFileDialog.newInstance();
-                nfd.show(getFragmentManager(), "NameDialog");
+                new MaterialDialog.Builder(FilePicker.this)
+                        .title("New File")
+                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                        .input("Directory Name", "", new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                onFileNameReturned(input.toString());
+                            }
+                        }).show();
             }
         });
-        isFabShowing = true;
-//        //get the theme type for this activity
-//        themeType = (ThemeType) getIntent().getSerializableExtra(THEME_TYPE);
-//        if (themeType == null) {
-//            themeType = ThemeType.ACTIVITY;
-//        }
-//
-//        setThemeType(themeType);
 
+        isFabShowing = true;
         areButtonsShowing = false;
 
         //set up the mime type for the file.
@@ -298,37 +301,6 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         recyclerView.setHasFixedSize(true);
         adapter = new FileRecyclerViewAdapter(this, new File[0], scopeType, callback);
         recyclerView.setAdapter(adapter);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                int firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
-                if (Math.abs(dy) >= 5) {
-                    if (dy > 0) {
-                        toggleButton(false);
-                    } else if (dy < 0) {
-                        toggleButton(true);
-                    }
-                    if (areButtonsShowing) {
-                        hideButtons();
-                        adapter.setSelectedPosition(-1);
-                        mLastFirstVisibleItem = firstVisibleItem;
-                    } else if (firstVisibleItem > adapter.getSelectedPosition()) {
-                        hideButtons();
-                        adapter.setSelectedPosition(-1);
-                    }
-                } else {
-                    mLastFirstVisibleItem = firstVisibleItem;
-                }
-                super.onScrolled(recyclerView, dx, dy);
-
-            }
-        });
 
         initializeViews();
 
@@ -375,45 +347,9 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         }
     }
 
-    /**
-     * Toggles the material floating action button.
-     *
-     * @param visible
-     */
-    public void toggleButton(final boolean visible) {
-        if (isFabShowing != visible) {
-            isFabShowing = visible;
-            int height = fab.getHeight();
-            if (height == 0) {
-                ViewTreeObserver vto = fab.getViewTreeObserver();
-                if (vto.isAlive()) {
-                    vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            ViewTreeObserver currentVto = fab.getViewTreeObserver();
-                            if (currentVto.isAlive()) {
-                                currentVto.removeOnPreDrawListener(this);
-                            }
-                            toggleButton(visible);
-                            return true;
-                        }
-                    });
-                    return;
-                }
-            }
-            int translationY = visible ? 0 : height;
-            fab.animate().setInterpolator(interpolator)
-                    .setDuration(350)
-                    .translationY(translationY);
-
-            // On pre-Honeycomb a translated view is still clickable, so we need to disable clicks manually
-            fab.setClickable(visible);
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        if (lastDirectory != null && !curDirectory.getPath()
+        if ((lastDirectory != null) && !curDirectory.getPath()
                 .equals(Environment.getExternalStorageDirectory().getPath())) {
             new UpdateFilesTask(this).execute(lastDirectory);
         } else {
@@ -427,14 +363,16 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         switch (requestCode) {
             //see if we got the permission.
             case REQUEST_FOR_READ_EXTERNAL_STORAGE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                        && (grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                     init();
                 } else {
                     setResult(RESULT_CANCELED);
                     finish();
                 }
-                return;
+                break;
+            default:
+                break;
         }
     }
 
@@ -585,7 +523,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
     /**
      * Method that shows the sliding panel
      */
-    private void showButtons() {
+    void showButtons() {
         if (!areButtonsShowing) {
             buttonContainer.clearAnimation();
             buttonContainer.startAnimation(slideUp);
@@ -597,7 +535,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
     /**
      * Method that hides the sliding panel
      */
-    private void hideButtons() {
+    void hideButtons() {
         if (areButtonsShowing) {
             buttonContainer.clearAnimation();
             buttonContainer.startAnimation(slideDown);
@@ -606,8 +544,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
         }
     }
 
-    @Override
-    public void onReturnFileName(String fileName) {
+    void onFileNameReturned(String fileName) {
         if (fileName.equalsIgnoreCase("") || fileName.isEmpty()) {
             fileName = null;
         }
@@ -637,7 +574,7 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
      * Class that updates the list view with a new array of files. Resets the adapter and the
      * directory title.
      */
-    private class UpdateFilesTask extends AsyncTask<File, Void, File[]> {
+    private final class UpdateFilesTask extends AsyncTask<File, Void, File[]> {
 
         private final Context mContext;
         private File[] fileArray;
@@ -687,10 +624,6 @@ public class FilePicker extends AppCompatActivity implements NameFileDialogInter
                 adapter = new FileRecyclerViewAdapter(FilePicker.this, files, scopeType, callback);
                 //TODO: Fix this, figure out how to add and remove the header.
                 recyclerView.setAdapter(adapter);
-            }
-            //make sure the button is showing.
-            if (!isFabShowing) {
-                toggleButton(true);
             }
             if (dialog.isShowing()) {
                 dialog.dismiss();

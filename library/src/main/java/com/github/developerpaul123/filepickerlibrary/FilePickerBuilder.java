@@ -104,7 +104,7 @@ public class FilePickerBuilder {
      *
      * @return a filepicker intent.
      */
-    public Intent build() {
+    public final Intent build() {
         Intent filePicker = new Intent(mContext, useMaterial ? FilePicker.class : FilePickerActivity.class);
         filePicker.putExtra(FilePicker.SCOPE, mScope);
         filePicker.putExtra(FilePicker.REQUEST, requestCode);

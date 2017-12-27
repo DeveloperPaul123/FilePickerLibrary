@@ -33,6 +33,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,7 +63,7 @@ import java.io.File;
  * Created by Paul Tsouchlos
  * Contains all the logic for selecting files or directories.
  */
-public class FilePickerActivity extends ListActivity implements NameFileDialogInterface {
+public class FilePickerActivity extends ListActivity {
 
     /**
      * Request code for when you want the file path to a specific file.
@@ -143,7 +144,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
      */
     private ListView listView;
     /**
-     * Button that allows user to selet the file or directory.
+     * Button that allows user to select the file or directory.
      */
     private Button selectButton;
     /**
@@ -370,7 +371,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
 
     @Override
     public void onBackPressed() {
-        if (lastDirectory != null && !curDirectory.getPath()
+        if ((lastDirectory != null) && !curDirectory.getPath()
                 .equals(Environment.getExternalStorageDirectory().getPath())) {
             new UpdateFilesTask(this).execute(lastDirectory);
         } else {
@@ -401,8 +402,6 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
                     setResult(RESULT_CANCELED);
                     finish();
                 }
-                return;
-
         }
     }
 
@@ -437,8 +436,15 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NameFileDialog nfd = NameFileDialog.newInstance();
-                nfd.show(getFragmentManager(), "NameDialog");
+                new MaterialDialog.Builder(FilePickerActivity.this)
+                        .title("New File")
+                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                        .input("Directory Name", "", new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(MaterialDialog dialog, CharSequence input) {
+                                onFileNameReturned(input.toString());
+                            }
+                        }).show();
             }
         });
 
@@ -616,8 +622,7 @@ public class FilePickerActivity extends ListActivity implements NameFileDialogIn
         }
     }
 
-    @Override
-    public void onReturnFileName(String fileName) {
+    public void onFileNameReturned(String fileName) {
 
         if (fileName.equalsIgnoreCase("") || fileName.isEmpty()) {
             fileName = null;
