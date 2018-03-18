@@ -6,7 +6,7 @@
 
 Simple library that allows for picking of files and directories. This is a clean and simple way to allow your user to easily select a file. This library is inspired by Android L and the new Material Design guidelines adding to its sleekness and beauty.
 
-![image] (images/main_framed.png)
+![image](images/main_framed.png)
 
 ## A Quick Overview What's In
 * Compatible down to API Level 16
